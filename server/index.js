@@ -7,37 +7,50 @@ const controladorUsuarios = require("./contoladores/user.controller");
 const PORT = 3001;
 
 const app = express();
-app.use(express.json());
-app.use(cors());
-
 app.use(
   session({
     secret: "mi-secreto",
-    resave: false,
+    resave: true,
     saveUninitialized: true,
-    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }, // Porque no estoy usando https, sino -> true
-  })
-);
+    cookie: { secure: false, maxAge: 60000 }, // Porque no estoy usando https, sino -> true
+  }))
+app.use(express.json());
+app.use(cors());
+
+
 
 app.post("/iniciarSesion", async (req, res) => {
+  console.log('Cookie:  ' + JSON.stringify(req.session.user))
   if (!req.session.user) {
-    controladorUsuarios.comprobarCredenciales((errors, results) => {
+    controladorUsuarios.comprobarCredenciales((errors, credencialesCorrectas, results) => {
       if (errors) {
         res
           .status(401)
           .send("Nombre de usuario y/o contraseña incorrectos: " + errors);
       } else {
-        res
-          .status(200)
-          .send("Inicio de sesión correcto" + JSON.stringify(results));
-        req.session.user = results;
-        console.log("Usuario almacenado en la sesión:   " + JSON.stringify(req.session.user));
+        if (credencialesCorrectas === true) {
+          req.session.user = results
+          res
+            .status(200)
+            .send(
+              "Credenciales correctas: " +
+                JSON.stringify(req.body)
+            );
+        } else {
+          console.log('Nombre de usuario y/o contraseña incorrectos')
+          res
+            .status(401)
+            .send("Nombre de usuario y/o contraseña incorrectos");
+        }
       }
     }, req.body);
   } else {
+    console.log("Utilizando la cookie para el inicio de sesión")
     res
       .status(200)
-      .send("El usuario ya ha iniciado sesión: " + JSON.stringify(req.session.user));
+      .send(
+        "El usuario ya ha iniciado sesión: " + JSON.stringify(req.session)
+      );
   }
 });
 
@@ -56,6 +69,11 @@ app.post("/registrarUsuario", async (req, res) => {
     }
   }, req.body);
 });
+
+app.get('/prueba', async (req, res) => {
+  console.log(JSON.stringify(req.session.user))
+  res.status(200).send(JSON.stringify(req.session.user))
+})
 
 app.get("/tareas", async (req, res) => {
   if (req.session.user) {

@@ -6,16 +6,20 @@ function comprobarCredenciales(callback, data) {
     [data.userName, data.password],
     (error, results) => {
       if (error) {
-        callback(error, null);
+        callback(error, null, null);
       } else {
-        callback(null, results);
+        if (results.length > 0) {
+          callback(null, true, results);
+        } else {
+          callback(null, false, null);
+        }
       }
     }
   );
 }
 
 function registrarUsuario(callback, data) {
-  console.log(JSON.stringify(data))
+  console.log(JSON.stringify(data));
   pool.query(
     "INSERT INTO usuarios (nombre, password) VALUES (?,?)",
     [data.userName, data.password],
