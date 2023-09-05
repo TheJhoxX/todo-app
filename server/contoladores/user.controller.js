@@ -1,0 +1,32 @@
+const pool = require("../conexion");
+
+function comprobarCredenciales(callback, data) {
+  pool.query(
+    "SELECT * FROM usuarios WHERE nombre = ? AND password = ?",
+    [data.userName, data.password],
+    (error, results) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, results);
+      }
+    }
+  );
+}
+
+function registrarUsuario(callback, data) {
+  console.log(JSON.stringify(data))
+  pool.query(
+    "INSERT INTO usuarios (nombre, password) VALUES (?,?)",
+    [data.userName, data.password],
+    (error, results) => {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, results);
+      }
+    }
+  );
+}
+
+module.exports = { comprobarCredenciales, registrarUsuario };

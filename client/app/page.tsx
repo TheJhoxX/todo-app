@@ -1,54 +1,85 @@
-import NextLink from "next/link";
-import { Link } from "@nextui-org/link";
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code"
-import { button as buttonStyles } from "@nextui-org/theme";
-import { siteConfig } from "@/config/site";
-import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+"use client";
+import {
+  Button,
+  Input,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+} from "@nextui-org/react";
+import SvgLista from "../components/svgLista";
+import { useEffect, useState, useRef } from "react";
 
-export default function Home() {
-	return (
-		<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-			<div className="inline-block max-w-lg text-center justify-center">
-				<h1 className={title()}>Make&nbsp;</h1>
-				<h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
-				<br />
-				<h1 className={title()}>
-					websites regardless of your design experience.
-				</h1>
-				<h2 className={subtitle({ class: "mt-4" })}>
-					Beautiful, fast and modern React UI library.
-				</h2>
-			</div>
+export default function App() {
+  const usernameRef = useRef(null);
+  const passwordRef = useRef(null);
 
-			<div className="flex gap-3">
-				<Link
-					isExternal
-					as={NextLink}
-					href={siteConfig.links.docs}
-					className={buttonStyles({ color: "primary", radius: "full", variant: "shadow" })}
-				>
-					Documentation
-				</Link>
-				<Link
-					isExternal
-					as={NextLink}
-					className={buttonStyles({ variant: "bordered", radius: "full" })}
-					href={siteConfig.links.github}
-				>
-					<GithubIcon size={20} />
-					GitHub
-				</Link>
-			</div>
+  const iniciarSesion = async () => {
+    const userName = usernameRef.current.value;
+    const password = passwordRef.current.value;
+    try {
+      const response = await fetch("http://localhost:3001/iniciarSesion", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({ userName, password }),
+      });
+      if (response.ok) {
+        alert("Autenticación exitosa");
+      } else {
+        alert("Autenticación ha fallado");
+      }
+    } catch (error) {
+      console.error("Error en la solicitud HTTP: " + error);
+    }
+  };
 
-			<div className="mt-8">
-				<Snippet hideSymbol hideCopyButton variant="flat">
-					<span>
-						Get started by editing <Code color="primary">app/page.tsx</Code>
-					</span>
-				</Snippet>
-			</div>
-		</section>
-	);
+  const [data, setData] = useState(null);
+
+  return (
+    <div className="flex items-center justify-center h-screen w-full">
+      <Card radius="lg" className="max-w-1/2 max-h-1/2">
+        <CardHeader className="flex items-center justify-center flex-col">
+          <SvgLista />
+          <p className="text-lg font-semibold">todo-app</p>
+        </CardHeader>
+        <Divider />
+        <CardBody className="flex flex-col items-center justify-center gap-4">
+          <Input
+            label="Nombre de usuario:"
+            labelPlacement="inside"
+            className="max-w-xs"
+            radius="lg"
+            isRequired
+            isClearable
+            ref={usernameRef}
+          />
+          <Input
+            type="password"
+            label="Contraseña:"
+            labelPlacement="inside"
+            className="max-w-xs"
+            isRequired
+            isClearable
+            ref={passwordRef}
+          />
+          <Button
+            onClick={iniciarSesion}
+            className="font-bold"
+            color="primary"
+            radius="lg"
+            variant="shadow"
+          >
+            Iniciar sesión
+          </Button>
+        </CardBody>
+        <CardFooter className="flex items-center justify-around gap-4">
+          <p>¿Aún no dispones de una cuenta?</p>
+          <p className="text-blue-700 hover:transition duration-1000 hover:underline hover:cursor-pointer hover:text-yellow-500">Regístrate</p>
+        </CardFooter>
+      </Card>
+    </div>
+  );
 }
