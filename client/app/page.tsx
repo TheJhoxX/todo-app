@@ -10,32 +10,41 @@ import {
 } from "@nextui-org/react";
 import SvgLista from "../components/svgLista";
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+
 const llamadasAEndpoints = require("../utils/llamadasAEndpoints");
 
 export default function App() {
+  const router = useRouter()
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
 
   const iniciarSesion = () => {
     const userName = usernameRef.current.value;
     const password = passwordRef.current.value;
-    llamadasAEndpoints.iniciarSesion(userName, password) 
-      .then((sesionCorrecta : boolean) => {
+    llamadasAEndpoints
+      .iniciarSesion(userName, password)
+      .then((sesionCorrecta: boolean) => {
         if (sesionCorrecta === false) {
-          cambiarErrores(true)
+          cambiarErrores(true);
+        } else {
+          router.push('/home')
         }
-    })
+      });
   };
 
   const registrarUsuario = () => {
     const userName = usernameRef.current.value;
     const password = passwordRef.current.value;
-    llamadasAEndpoints.registrarUsuario(userName, password).
-      then((registroCorrecto: boolean) => {
+    llamadasAEndpoints
+      .registrarUsuario(userName, password)
+      .then((registroCorrecto: boolean) => {
         if (registroCorrecto === false) {
-          cambiarErrores(true)
+          cambiarErrores(true);
+        } else {
+          cambiarErrores(false);
         }
-    })
+      });
   };
 
   const [inicio, setInicio] = useState(true);
@@ -43,7 +52,7 @@ export default function App() {
 
   const cambiarInterfaz = () => {
     setInicio(!inicio); // Cambia el estado al opuesto del estado actual
-    cambiarErrores(false)
+    cambiarErrores(false);
   };
 
   const cambiarErrores = (nuevoEstado: boolean) => {
@@ -83,7 +92,7 @@ export default function App() {
           />
           <Button
             onClick={inicio ? iniciarSesion : registrarUsuario}
-            className="font-bold transition duration-200"
+            className="w-1/2 font-bold transition duration-200"
             color="primary"
             radius="lg"
             variant="shadow"

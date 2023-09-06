@@ -2,6 +2,7 @@ const iniciarSesion = async (userName: String, password: String) => {
   try {
     const response = await fetch("http://localhost:3001/iniciarSesion", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-type": "application/json",
       },
@@ -25,6 +26,7 @@ const registrarUsuario = async (userName: String, password: String) => {
   try {
     const response = await fetch("http://localhost:3001/registrarUsuario", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-type": "application/json",
       },

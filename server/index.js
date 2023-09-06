@@ -15,12 +15,16 @@ app.use(
     cookie: { secure: false, maxAge: 60000 }, // Porque no estoy usando https, sino -> true
   }))
 app.use(express.json());
-app.use(cors());
-
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+}));
 
 
 app.post("/iniciarSesion", async (req, res) => {
+
   console.log('Cookie:  ' + JSON.stringify(req.session.user))
+  
   if (!req.session.user) {
     controladorUsuarios.comprobarCredenciales((errors, credencialesCorrectas, results) => {
       if (errors) {
