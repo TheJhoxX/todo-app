@@ -13,41 +13,42 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
-  }))
+  })
+);
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-}));
-
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.post("/iniciarSesion", async (req, res) => {
-  
   if (!req.session.user) {
-    controladorUsuarios.comprobarCredenciales((errors, credencialesCorrectas, results) => {
-      if (errors) {
-        res
-          .status(401)
-          .send("Nombre de usuario y/o contraseña incorrectos: " + errors);
-      } else {
-        if (credencialesCorrectas === true) {
-          req.session.user = results
-          res
-            .status(200)
-            .send(
-              "Credenciales correctas: " +
-                JSON.stringify(req.body)
-            );
-        } else {
-          console.log('Nombre de usuario y/o contraseña incorrectos')
+    controladorUsuarios.comprobarCredenciales(
+      (errors, credencialesCorrectas, results) => {
+        if (errors) {
           res
             .status(401)
-            .send("Nombre de usuario y/o contraseña incorrectos");
+            .send("Nombre de usuario y/o contraseña incorrectos: " + errors);
+        } else {
+          if (credencialesCorrectas === true) {
+            req.session.user = results;
+            res
+              .status(200)
+              .send("Credenciales correctas: " + JSON.stringify(req.body));
+          } else {
+            console.log("Nombre de usuario y/o contraseña incorrectos");
+            res
+              .status(401)
+              .send("Nombre de usuario y/o contraseña incorrectos");
+          }
         }
-      }
-    }, req.body);
+      },
+      req.body
+    );
   } else {
-    console.log("Utilizando la cookie para el inicio de sesión")
+    console.log("Utilizando la cookie para el inicio de sesión");
     res
       .status(200)
       .send(
@@ -73,10 +74,10 @@ app.post("/registrarUsuario", async (req, res) => {
   }, req.body);
 });
 
-app.get('/prueba', async (req, res) => {
-  console.log(JSON.stringify(req.session.user))
-  res.status(200).send(JSON.stringify(req.session.user))
-})
+app.get("/prueba", async (req, res) => {
+  console.log(JSON.stringify(req.session.user));
+  res.status(200).send(JSON.stringify(req.session.user));
+});
 
 app.get("/tareas", async (req, res) => {
   if (req.session.user) {

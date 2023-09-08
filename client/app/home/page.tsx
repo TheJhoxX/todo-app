@@ -11,7 +11,7 @@ export default function Home() {
         <Tab key="normal" title="Normal"></Tab>
         <Tab key="opcional" title="Opcional"></Tab>
       </Tabs>
-      <div className="w-11/12 flex flex-col items-center gap-4">
+      <div className="w-11/12 flex flex-col items-center gap-6">
               <Tarea tipo={"importante"} />
               <Tarea tipo={"normal"} />
               <Tarea tipo={"opcional"} />

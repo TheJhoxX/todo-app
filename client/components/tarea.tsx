@@ -46,9 +46,9 @@ export default function Tarea({ tipo }: { tipo: string }) {
     }
   }
   return (
-    <div >
-      <Card radius="lg" className={`transition duration-1000 bg-white ${sombra()}`}>
-        <CardHeader className="w-full flex items-center justify-between gap-4">
+    <>
+      <div  className={`rounded-xl flex flex-col items-center transition duration-1000 bg-white ${sombra()}`}>
+        <div className="p-2 w-full flex items-center justify-between gap-4">
           <Checkbox
             isSelected={isSelected}
             onValueChange={setIsSelected}
@@ -59,9 +59,9 @@ export default function Tarea({ tipo }: { tipo: string }) {
             <p className="font-bold text-black">Titulo ejemplo</p>
           </Checkbox>
           <h1 className="text-gray-500">15-11-2002</h1>
-        </CardHeader>
+        </div>
         <Divider className={`${divider()} h-2`} />
-        <CardBody className="flex items-center justify-around gap-4 max-h-28">
+        <div className="p-2 flex items-center justify-around gap-4 max-h-28">
           <ScrollShadow className="w-full h-full" size={20}>
             <p className="text-black text-justify">
               En el texto argumentativo, el autor plantea una hipotesis o toma
@@ -75,8 +75,8 @@ export default function Tarea({ tipo }: { tipo: string }) {
               el pensamiento del otro para transformar su opinion.
             </p>
           </ScrollShadow>
-        </CardBody>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </>
   );
 }
