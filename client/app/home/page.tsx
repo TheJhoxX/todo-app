@@ -1,11 +1,11 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/react";
-import Tarea from "@/components/tarea"; 
+import Tarea from "@/components/tarea";
     
 export default function Home() {
   return (
     <div className="w-full h-screen flex flex-col items-center gap-12">
-      <Tabs className="mt-4" color="primary" radius="full" variant="bordered">
+      <Tabs className="mt-4 shadow-purple-500" color="primary" radius="full" variant="bordered">
         <Tab key="todas" title="Todas"></Tab>
         <Tab key="importante" title="Importante"></Tab>
         <Tab key="normal" title="Normal"></Tab>

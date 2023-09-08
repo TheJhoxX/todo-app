@@ -47,6 +47,10 @@ export default function App() {
       });
   };
 
+  useEffect(() => {
+    iniciarSesion()
+  },[])
+
   const [inicio, setInicio] = useState(true);
   const [sesionIncorrecta, setSesionIncorrecta] = useState(false);
 

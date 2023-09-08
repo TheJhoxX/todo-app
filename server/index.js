@@ -12,7 +12,7 @@ app.use(
     secret: "mi-secreto",
     resave: true,
     saveUninitialized: true,
-    cookie: { secure: false, maxAge: 60000 }, // Porque no estoy usando https, sino -> true
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
   }))
 app.use(express.json());
 app.use(cors({
@@ -22,8 +22,6 @@ app.use(cors({
 
 
 app.post("/iniciarSesion", async (req, res) => {
-
-  console.log('Cookie:  ' + JSON.stringify(req.session.user))
   
   if (!req.session.user) {
     controladorUsuarios.comprobarCredenciales((errors, credencialesCorrectas, results) => {
@@ -53,7 +51,8 @@ app.post("/iniciarSesion", async (req, res) => {
     res
       .status(200)
       .send(
-        "El usuario ya ha iniciado sesión: " + JSON.stringify(req.session)
+        "Utilizando la cookie para el inicio de sesión: " +
+          JSON.stringify(req.session)
       );
   }
 });

@@ -10,14 +10,11 @@ const iniciarSesion = async (userName: String, password: String) => {
     });
     console.log(response)
     if (response.ok) {
-      alert("Autenticación exitosa");
       return true
     } else {
-      alert("Autenticación ha fallado");
       return false
     }
   } catch (error) {
-    console.error("Error en la solicitud HTTP: " + error);
     return false
   }
 };

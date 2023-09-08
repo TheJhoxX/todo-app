@@ -1,5 +1,25 @@
-import {Card, CardBody, CardHeader, Divider, Checkbox, CardFooter, ScrollShadow} from '@nextui-org/react'
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+  Checkbox,
+  ScrollShadow,
+} from "@nextui-org/react";
+import { useState } from "react";
+
 export default function Tarea({ tipo }: { tipo: string }) {
+  const [isSelected, setIsSelected] = useState(false);
+
+  const divider = () => {
+    if (tipo === "importante") {
+      return "bg-danger";
+    } else if (tipo === "normal") {
+      return "bg-primary";
+    } else {
+      return "bg-secondary";
+    }
+  };
   const importancia = () => {
     if (tipo === "importante") {
       return "danger";
@@ -10,15 +30,37 @@ export default function Tarea({ tipo }: { tipo: string }) {
     }
   };
 
+  const sombra = () => {
+    if (isSelected) {
+      if (tipo === "importante") {
+        return "transition duration-1000 -translate-y-2 shadow-danger shadow-lg"
+      } 
+      else if (tipo === "normal") {
+        return "transition duration-1000 -translate-y-2 shadow-primary shadow-lg transition-customShadow duration-1000"
+      }
+      else if (tipo === "opcional") {
+        return "transition duration-1000 -translate-y-2 shadow-secondary shadow-lg transition-customShadow duration-1000"
+      }
+    } else {
+      return ""
+    }
+  }
   return (
-    <>
-      <Card radius="lg" className="w-full py-2 bg-white text-black">
-        <CardHeader>
-          <Checkbox color={importancia()} className="w-full h-full" lineThrough>
+    <div >
+      <Card radius="lg" className={`transition duration-1000 bg-white ${sombra()}`}>
+        <CardHeader className="w-full flex items-center justify-between gap-4">
+          <Checkbox
+            isSelected={isSelected}
+            onValueChange={setIsSelected}
+            color={importancia()}
+            className="w-full h-full"
+            lineThrough
+          >
             <p className="font-bold text-black">Titulo ejemplo</p>
           </Checkbox>
+          <h1 className="text-gray-500">15-11-2002</h1>
         </CardHeader>
-        <Divider className={`bg-${importancia()} h-2`} />
+        <Divider className={`${divider()} h-2`} />
         <CardBody className="flex items-center justify-around gap-4 max-h-28">
           <ScrollShadow className="w-full h-full" size={20}>
             <p className="text-black text-justify">
@@ -35,6 +77,6 @@ export default function Tarea({ tipo }: { tipo: string }) {
           </ScrollShadow>
         </CardBody>
       </Card>
-    </>
+    </div>
   );
 }
