@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
-// Configuración de express-session
+const controladorTareas = require("./contoladores/tareas.controller")
 
 const PORT = 3001;
 
@@ -33,7 +33,12 @@ app.post("/iniciarSesion", async (req, res) => {
             .send("Nombre de usuario y/o contraseña incorrectos: " + errors);
         } else {
           if (credencialesCorrectas === true) {
-            req.session.user = results;
+            console.log(results)
+            req.session.user = {
+              userId: results.id,
+              username: results.nombre,
+              password: results.password,
+            };
             res
               .status(200)
               .send("Credenciales correctas: " + JSON.stringify(req.body));
@@ -74,14 +79,21 @@ app.post("/registrarUsuario", async (req, res) => {
   }, req.body);
 });
 
-app.get("/prueba", async (req, res) => {
-  console.log(JSON.stringify(req.session.user));
-  res.status(200).send(JSON.stringify(req.session.user));
-});
-
 app.get("/tareas", async (req, res) => {
   if (req.session.user) {
     console.log("Usuario accediendo a sus tareas");
+    controladorTareas.obtenerTareasDeUsuario((errors, results) => {
+      if (errors) {
+        res
+          .status(401)
+          .send(
+            "Se ha producido un error al acceder a las tareas del usuario: " +
+              errors
+          );
+      } else {
+        res.status(200).json({ "nombreTarea": "nombre de ejemplo" });
+      }
+    }, req.session.user);
   } else {
     console.log("Usuario no identificado");
   }

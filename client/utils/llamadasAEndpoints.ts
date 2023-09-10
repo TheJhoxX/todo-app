@@ -1,3 +1,6 @@
+import { error } from "console";
+import { Result } from "postcss";
+
 const iniciarSesion = async (userName: String, password: String) => {
   try {
     const response = await fetch("http://localhost:3001/iniciarSesion", {
@@ -42,4 +45,25 @@ const registrarUsuario = async (userName: String, password: String) => {
   }
 };
 
-module.exports = {iniciarSesion, registrarUsuario}
+const obtenerTareasDeUsuario = async () => {
+  fetch("http://localhost:3001/tareas", {
+    method: "GET",
+    credentials: "include",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          "Se ha producido un error al obtener la respuesta JSON"
+        );
+      }
+      return response.json();
+    })
+    .then((data) => {
+      return data.nombreTarea
+    })
+    .catch((error) => {
+      console.error("Se ha producido un error al obtener la respuesta JSON");
+    });
+};
+
+module.exports = {iniciarSesion, registrarUsuario, obtenerTareasDeUsuario}
