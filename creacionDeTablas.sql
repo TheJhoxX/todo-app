@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
 CREATE TABLE IF NOT EXISTS tareas (
     id INT NOT NULL AUTO_INCREMENT,
     idUsuario INT NOT NULL,
-    titulo VARCHAR(150) NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    contenido VARCHAR(255) NOT NULL,
     fechaLimite TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     tipo ENUM ('importante','normal','opcional'),
     PRIMARY KEY (id),

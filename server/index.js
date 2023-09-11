@@ -35,10 +35,11 @@ app.post("/iniciarSesion", async (req, res) => {
           if (credencialesCorrectas === true) {
             console.log(results)
             req.session.user = {
-              userId: results.id,
-              username: results.nombre,
-              password: results.password,
+              userId: results[0].id,
+              username: results[0].nombre,
+              password: results[0].password,
             };
+            console.log("COOKIE:  " + JSON.stringify(req.session.user))
             res
               .status(200)
               .send("Credenciales correctas: " + JSON.stringify(req.body));
@@ -80,8 +81,8 @@ app.post("/registrarUsuario", async (req, res) => {
 });
 
 app.get("/tareas", async (req, res) => {
+  console.log("Usuario registrado en la cookie: "  + JSON.stringify(req.session.user))
   if (req.session.user) {
-    console.log("Usuario accediendo a sus tareas");
     controladorTareas.obtenerTareasDeUsuario((errors, results) => {
       if (errors) {
         res
@@ -91,7 +92,8 @@ app.get("/tareas", async (req, res) => {
               errors
           );
       } else {
-        res.status(200).json({ "nombreTarea": "nombre de ejemplo" });
+        console.log(results)
+        res.status(200).json(results);
       }
     }, req.session.user);
   } else {

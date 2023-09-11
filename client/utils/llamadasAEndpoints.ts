@@ -46,24 +46,22 @@ const registrarUsuario = async (userName: String, password: String) => {
 };
 
 const obtenerTareasDeUsuario = async () => {
-  fetch("http://localhost:3001/tareas", {
-    method: "GET",
-    credentials: "include",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(
-          "Se ha producido un error al obtener la respuesta JSON"
-        );
-      }
-      return response.json();
-    })
-    .then((data) => {
-      return data.nombreTarea
-    })
-    .catch((error) => {
-      console.error("Se ha producido un error al obtener la respuesta JSON");
+  try {
+    const response = await fetch("http://localhost:3001/tareas", {
+      method: "GET",
+      credentials: "include",
     });
+    if (!response.ok) {
+      throw new Error ("Se ha producido un error al obtener las tareas")
+    }
+    const data = await response.json()
+    return data
+  }
+  catch (error) {
+    console.error("Se ha producido un error al obtener la respuesta JSON")
+    throw error
+  }
+  
 };
 
 module.exports = {iniciarSesion, registrarUsuario, obtenerTareasDeUsuario}

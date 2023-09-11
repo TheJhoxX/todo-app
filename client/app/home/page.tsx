@@ -1,36 +1,74 @@
 "use client";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Button, Tooltip, useDisclosure } from "@nextui-org/react";
 import Tarea from "@/components/tarea";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const llamadasAEndpoints = require("../../utils/llamadasAEndpoints");
-    
+import TabMenu from "@/components/tabMenu";
+import FormularioTarea from "@/components/FormularioTarea";
+
+interface tipoTarea {
+  id: number;
+  idUsuario: number;
+  titulo: string;
+  fechaLimite: string; // Puede ser una cadena ISO 8601 o un objeto Date
+  tipo: "importante" | "normal" | "opcional";
+}
+
 export default function Home() {
+  const [tareas, setTareas] = useState<tipoTarea[]>([]);
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onOpenChange = () => {
+    setIsOpen(!isOpen);
+  };
 
   const obtenerTareas = () => {
-    const tareas = llamadasAEndpoints
+    llamadasAEndpoints
       .obtenerTareasDeUsuario()
-      .then((tareas) => {
-        console.log(tareas);
+      .then((tareas: tipoTarea[]) => {
+        // Aquí definimos el tipo del parámetro como Tarea[]
+        setTareas(tareas);
+      })
+      .catch((error: Error) => {
+        console.error("Error al obtener tareas:", error);
       });
-    
-  }
+  };
 
   useEffect(() => {
-    obtenerTareas()
-  }, [])
-  
+    obtenerTareas();
+  }, []);
+
   return (
     <div className="w-full h-screen flex flex-col items-center gap-12">
-      <Tabs className="mt-4 shadow-purple-500" color="primary" radius="full" variant="bordered">
-        <Tab key="todas" title="Todas"></Tab>
-        <Tab key="importante" title="Importante"></Tab>
-        <Tab key="normal" title="Normal"></Tab>
-        <Tab key="opcional" title="Opcional"></Tab>
-      </Tabs>
+      <TabMenu />
+      <FormularioTarea isOpen={isOpen} onOpenChange={onOpenChange} />
+      <div className="flex items-center justify-between gap-4 w-11/12">
+        <Button
+          onPress={onOpenChange}
+          color="primary"
+          className="font-bold text-white"
+          radius="full"
+        >
+          Añadir tarea
+        </Button>
+        <Tooltip color="danger" content="Las tareas seleccionadas finalizarán">
+          <Button
+            color="danger"
+            variant="flat"
+            className="font-bold"
+            radius="full"
+          >
+            Eliminar tareas
+          </Button>
+        </Tooltip>
+      </div>
       <div className="w-11/12 flex flex-col items-center gap-6">
-              <Tarea tipo={"importante"} />
-              <Tarea tipo={"normal"} />
-              <Tarea tipo={"opcional"} />
+        {tareas.map((tarea: tipoTarea) => {
+          return (
+            <Tarea key={tarea.id} tipo={tarea.tipo} titulo={tarea.titulo} />
+          );
+        })}
       </div>
     </div>
   );
