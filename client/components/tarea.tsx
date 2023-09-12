@@ -58,19 +58,22 @@ export default function Tarea({
     ${sombra()} hover:cursor-pointer`}
     onClick={handleClick}
     >
-      <Checkbox
+      <div className="flex items-center justify-start w-1/3">
+        <Checkbox
         isSelected={isSelected}
         onValueChange={handleClick}
         color={importancia()}
-        className="w-full h-full"
         lineThrough
-      >
+        className="w-1/3"
+        ></Checkbox>
         <p className="font-bold text-black">{titulo}</p>
-      </Checkbox>
-      <Chip size="sm" variant="flat" color={importancia()}>
-        {tipo}
-      </Chip>
-      <div className="flex items-center justify-center gap-2">
+      </div>
+      <div className="flex items-center justify-center w-1/3">
+        <Chip size="sm" variant="flat" color={importancia()} className="w-1/3">
+          {tipo}
+        </Chip>
+      </div>
+      <div className="flex items-center justify-end gap-2 w-1/3">
         <h1 className="text-gray-500">15-11-2002</h1>
         <Tooltip content="Ver detalles de la tarea">
           <Button className="bg-gray-200" size="sm">
