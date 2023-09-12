@@ -1,6 +1,7 @@
-import { Button, Checkbox, Tooltip } from "@nextui-org/react";
+import { Button, Checkbox, Tooltip, Chip } from "@nextui-org/react";
 import { useState } from "react";
 import EyeIcon from "./eyeIcon";
+import { color } from "framer-motion";
 
 export default function Tarea({
   titulo,
@@ -51,11 +52,11 @@ export default function Tarea({
 
   return (
     <div
-      className={`rounded-lg p-2 w-full 
+    className={`rounded-xl p-3 w-full 
     flex items-center justify-between gap-4
     transition duration-1000 bg-white
     ${sombra()} hover:cursor-pointer`}
-      onClick={handleClick}
+    onClick={handleClick}
     >
       <Checkbox
         isSelected={isSelected}
@@ -66,10 +67,15 @@ export default function Tarea({
       >
         <p className="font-bold text-black">{titulo}</p>
       </Checkbox>
+      <Chip size="sm" variant="flat" color={importancia()}>
+        {tipo}
+      </Chip>
       <div className="flex items-center justify-center gap-2">
         <h1 className="text-gray-500">15-11-2002</h1>
         <Tooltip content="Ver detalles de la tarea">
-          <Button className="bg-gray-200" size="sm"><EyeIcon /></Button>
+          <Button className="bg-gray-200" size="sm">
+            <EyeIcon />
+          </Button>
         </Tooltip>
       </div>
     </div>
