@@ -10,6 +10,7 @@ import {
   Select,
   SelectItem,
   Selection,
+  Textarea,
 } from "@nextui-org/react";
 
 interface FormularioTareaProps {
@@ -17,7 +18,7 @@ interface FormularioTareaProps {
   onOpenChange: () => void;
 }
 
-function MiComponente({ isOpen, onOpenChange }: FormularioTareaProps) {
+export default function MiComponente({ isOpen, onOpenChange }: FormularioTareaProps) {
   const [value, setValue] = React.useState<Selection>(new Set([]));
 
   const color = () => {
@@ -57,10 +58,11 @@ function MiComponente({ isOpen, onOpenChange }: FormularioTareaProps) {
                   label="Título"
                   description="Título que aparecerá al visualizar las tareas"
                 />
-                <Input
+                <Textarea
                   type="text"
-                  isClearable
                   isRequired
+                  minRows={2}
+                  maxRows={2}
                   radius="lg"
                   size="md"
                   label="Contenido"
@@ -104,4 +106,3 @@ function MiComponente({ isOpen, onOpenChange }: FormularioTareaProps) {
   );
 }
 
-export default MiComponente;

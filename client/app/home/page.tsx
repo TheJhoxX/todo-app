@@ -5,17 +5,19 @@ import { useEffect, useState } from "react";
 const llamadasAEndpoints = require("../../utils/llamadasAEndpoints");
 import TabMenu from "@/components/tabMenu";
 import FormularioTarea from "@/components/FormularioTarea";
+import DetallesDeTarea from "@/components/DetallesDeTarea";
 
-interface tipoTarea {
+interface tarea {
   id: number;
   idUsuario: number;
   titulo: string;
+  contenido: string,
   fechaLimite: string; // Puede ser una cadena ISO 8601 o un objeto Date
-  tipo: "importante" | "normal" | "opcional";
+  tipo: "importante" | "normal" | "opcional",
 }
 
 export default function Home() {
-  const [tareas, setTareas] = useState<tipoTarea[]>([]);
+  const [tareas, setTareas] = useState<tarea[]>([]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,7 +28,7 @@ export default function Home() {
   const obtenerTareas = () => {
     llamadasAEndpoints
       .obtenerTareasDeUsuario()
-      .then((tareas: tipoTarea[]) => {
+      .then((tareas: tarea[]) => {
         // Aquí definimos el tipo del parámetro como Tarea[]
         setTareas(tareas);
       })
@@ -64,9 +66,9 @@ export default function Home() {
         </Tooltip>
       </div>
       <div className="w-11/12 flex flex-col items-center gap-6">
-        {tareas.map((tarea: tipoTarea) => {
+        {tareas.map((tarea: tarea) => {
           return (
-            <Tarea key={tarea.id} tipo={tarea.tipo} titulo={tarea.titulo} />
+            <Tarea key={tarea.id} titulo={tarea.titulo} contenido={tarea.contenido} fechaLimite={tarea.fechaLimite} tipo={tarea.tipo} />
           );
         })}
       </div>
