@@ -53,28 +53,30 @@ export default function Tarea({
   return (
     <div
     className={`rounded-xl p-3 w-full 
-    flex items-center justify-between gap-4
+    flex flex-col md:flex-row lg:flex-row items-center 
+    justify-between md:gap-4 lg:gap-4
     transition duration-1000 bg-white
     ${sombra()} hover:cursor-pointer`}
-    onClick={handleClick}
+      onClick={handleClick}
     >
-      <div className="flex items-center justify-start w-1/3">
+      <div className="flex flex-col gap-2 items-center justify-center w-full md:justify-start lg:w-1/2 lg:justify-start">
+        <div className=" w-full flex items-center justify-center md:justify-start lg:justify-start ">
         <Checkbox
-        isSelected={isSelected}
-        onValueChange={handleClick}
-        color={importancia()}
-        lineThrough
-        className="w-1/3"
-        ></Checkbox>
-        <p className="font-bold text-black">{titulo}</p>
+          isSelected={isSelected}
+          onValueChange={handleClick}
+          color={importancia()}
+          lineThrough
+          >
+             <p className="font-bold text-black">{titulo}</p>
+        </Checkbox>
+        </div>
+        <h1 className="text-gray-500 text-medium md:hidden lg:hidden">15-11-2002</h1>
       </div>
-      <div className="flex items-center justify-center w-1/3">
+      <div className="flex justify-between items-center w-full md:justify-end lg:justify-end gap-2 ">
         <Chip size="sm" variant="flat" color={importancia()} className="w-1/3">
           {tipo}
         </Chip>
-      </div>
-      <div className="flex items-center justify-end gap-2 w-1/3">
-        <h1 className="text-gray-500">15-11-2002</h1>
+        <h1 className=" md:text-gray-500 md:text-sm lg:text-medium lg:text-gray-500">15-11-2002</h1>
         <Tooltip content="Ver detalles de la tarea">
           <Button className="bg-gray-200" size="sm">
             <EyeIcon />
