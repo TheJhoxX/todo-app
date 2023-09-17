@@ -12,14 +12,20 @@ import {
   Selection,
   Textarea,
 } from "@nextui-org/react";
+import Calendario from "./Calendario";
 
 interface FormularioTareaProps {
   isOpen: boolean;
   onOpenChange: () => void;
 }
 
-export default function MiComponente({ isOpen, onOpenChange }: FormularioTareaProps) {
+export default function MiComponente({
+  isOpen,
+  onOpenChange,
+}: FormularioTareaProps) {
   const [value, setValue] = React.useState<Selection>(new Set([]));
+  const [fechaSeleccionada, setFechaSeleccionada] = React.useState<Date | undefined>();
+  const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>()
 
   const color = () => {
     if (Array.from(value)[0] === "normal") {
@@ -32,6 +38,16 @@ export default function MiComponente({ isOpen, onOpenChange }: FormularioTareaPr
       return "default";
     }
   };
+
+  const handleFechaSeleccionada = (fechaSeleccionada: Date | undefined) => {
+    setFechaSeleccionada(fechaSeleccionada)
+  }
+
+  const handleCambioHora = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.value)
+
+    setHoraSeleccionada(event.target.value)
+  }
 
   return (
     <>
@@ -80,10 +96,22 @@ export default function MiComponente({ isOpen, onOpenChange }: FormularioTareaPr
                   radius="lg"
                   variant="flat"
                 >
-                  <SelectItem key={"normal"} value={"Normal"}>Normal</SelectItem>
-                  <SelectItem key={"importante"} value={"Importante"}>Importante</SelectItem>
-                  <SelectItem key={"opcional"} value={"Opcional"}>Opcional</SelectItem>
+                  <SelectItem key={"normal"} value={"Normal"}>
+                    Normal
+                  </SelectItem>
+                  <SelectItem key={"importante"} value={"Importante"}>
+                    Importante
+                  </SelectItem>
+                  <SelectItem key={"opcional"} value={"Opcional"}>
+                    Opcional
+                  </SelectItem>
                 </Select>
+                <div className="flex w-full items-center justify-start">
+                  <p>Selecciona una hora y un dia:</p>
+                  <p className="text-danger">*</p>
+                </div>
+                <input type="time" className="rounded-lg text-center p-4" onChange={handleCambioHora} />
+                <Calendario cambiarFechaSeleccionada={handleFechaSeleccionada} />
               </ModalBody>
               <ModalFooter>
                 <Button
@@ -105,4 +133,3 @@ export default function MiComponente({ isOpen, onOpenChange }: FormularioTareaPr
     </>
   );
 }
-

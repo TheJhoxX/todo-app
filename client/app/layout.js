@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import {Providers} from './providers'
+import { Providers } from "./providers";
 
 export const metadata = {
   title: "todo-app",
@@ -8,13 +8,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" >
+    <html lang="es">
       <body className="dark">
         <Providers>
-          {children}  
+          {children}
         </Providers>
       </body>
     </html>
-  )
+  );
 }
-

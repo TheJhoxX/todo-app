@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 const llamadasAEndpoints = require("../../utils/llamadasAEndpoints");
 import TabMenu from "@/components/tabMenu";
 import FormularioTarea from "@/components/FormularioTarea";
-import DetallesDeTarea from "@/components/DetallesDeTarea";
 
 interface tarea {
   id: number;
