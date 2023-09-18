@@ -95,7 +95,7 @@ export default function App() {
             fullWidth={true}
           />
           <Button
-            onClick={inicio ? iniciarSesion : registrarUsuario}
+            onPress={inicio ? iniciarSesion : registrarUsuario}
             className="w-1/2 font-bold transition duration-200"
             color="primary"
             radius="lg"

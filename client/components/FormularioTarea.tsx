@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -13,29 +13,47 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import Calendario from "./Calendario";
+const llamadasAEndpoints = require('../utils/llamadasAEndpoints')
 
 interface FormularioTareaProps {
   isOpen: boolean;
   onOpenChange: () => void;
+  getTareas: () => void;
 }
+
+interface camposFormulario  {
+  formularioCorrecto: boolean;
+  campos: {
+    [campo: string]: boolean;
+  };
+};
 
 export default function MiComponente({
   isOpen,
   onOpenChange,
+  getTareas,
 }: FormularioTareaProps) {
-  const [value, setValue] = React.useState<Selection>(new Set([]));
+  
+  const contenidoRef = useRef(null)
+  const tituloRef = useRef(null)
+
+  const [tipo, setTipo] = React.useState<Selection>(new Set([]));
   const [fechaSeleccionada, setFechaSeleccionada] = React.useState<Date | undefined>();
   const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>()
+  const [tituloValido, setTituloValido] = React.useState<Boolean>(true);
+  const [contenidoValido, setContenidoValido] = React.useState<Boolean>(true);
+
+
 
   const color = () => {
-    if (Array.from(value)[0] === "normal") {
+    if (Array.from(tipo)[0] === "normal") {
       return "primary";
-    } else if (Array.from(value)[0] === "opcional") {
+    } else if (Array.from(tipo)[0] === "opcional") {
       return "secondary";
-    } else if (Array.from(value)[0] === "importante") {
+    } else if (Array.from(tipo)[0] === "importante") {
       return "danger";
     } else {
-      return "default";
+      return null;
     }
   };
 
@@ -48,6 +66,31 @@ export default function MiComponente({
 
     setHoraSeleccionada(event.target.value)
   }
+
+  const handleNuevaTarea = () => {
+   
+    const titulo = tituloRef.current ? tituloRef.current.value : null
+    const contenido = contenidoRef.current ? contenidoRef.current.value : null
+    const hora = horaSeleccionada
+    const fecha = fechaSeleccionada
+    const tipoDeTarea = tipo
+
+    llamadasAEndpoints
+      .nuevaTarea(titulo,contenido, hora, fecha?.toISOString(), tipoDeTarea.currentKey)
+      .then((camposCorrectos : camposFormulario) => {
+        if (camposCorrectos.formularioCorrecto === false) {
+          if (!camposCorrectos.campos.titulo) {
+            setTituloValido(false)
+          }
+          if (!camposCorrectos.campos.contenido) {
+            setContenidoValido(false)
+          }
+        } 
+        else {
+          getTareas()
+        }
+      });
+  };
 
   return (
     <>
@@ -73,6 +116,8 @@ export default function MiComponente({
                   size="md"
                   label="Título"
                   description="Título que aparecerá al visualizar las tareas"
+                  validationState={tituloValido ? "valid" : "invalid"}
+                  ref={tituloRef}
                 />
                 <Textarea
                   type="text"
@@ -83,12 +128,13 @@ export default function MiComponente({
                   size="md"
                   label="Contenido"
                   description="Datos adicionales / una descripción sobre la tarea"
+                  ref={contenidoRef}
                 />
                 <Select
                   selectionMode="single"
                   color={color()}
-                  selectedKeys={value}
-                  onSelectionChange={setValue}
+                  selectedKeys={tipo}
+                  onSelectionChange={setTipo}
                   placeholder="Elige cómo de importante es la tarea"
                   label="Importancia"
                   size="md"
@@ -96,13 +142,13 @@ export default function MiComponente({
                   radius="lg"
                   variant="flat"
                 >
-                  <SelectItem key={"normal"} value={"Normal"}>
+                  <SelectItem key={"normal"} value={"normal"}>
                     Normal
                   </SelectItem>
-                  <SelectItem key={"importante"} value={"Importante"}>
+                  <SelectItem key={"importante"} value={"importante"}>
                     Importante
                   </SelectItem>
-                  <SelectItem key={"opcional"} value={"Opcional"}>
+                  <SelectItem key={"opcional"} value={"opcional"}>
                     Opcional
                   </SelectItem>
                 </Select>
@@ -122,7 +168,7 @@ export default function MiComponente({
                 >
                   Cancelar
                 </Button>
-                <Button color="primary" radius="lg" onPress={onClose}>
+                <Button color="primary" radius="lg" onPress={handleNuevaTarea}>
                   Añadir
                 </Button>
               </ModalFooter>

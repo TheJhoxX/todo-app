@@ -10,9 +10,9 @@ interface tarea {
   id: number;
   idUsuario: number;
   titulo: string;
-  contenido: string,
+  contenido: string;
   fechaLimite: string; // Puede ser una cadena ISO 8601 o un objeto Date
-  tipo: "importante" | "normal" | "opcional",
+  tipo: "importante" | "normal" | "opcional";
 }
 
 export default function Home() {
@@ -29,7 +29,12 @@ export default function Home() {
       .obtenerTareasDeUsuario()
       .then((tareas: tarea[]) => {
         // Aquí definimos el tipo del parámetro como Tarea[]
-        setTareas(tareas);
+        if (tareas) {
+          setTareas(tareas);
+        }
+        else {
+          setTareas([])
+        }
       })
       .catch((error: Error) => {
         console.error("Error al obtener tareas:", error);
@@ -43,7 +48,7 @@ export default function Home() {
   return (
     <div className="w-full h-screen flex flex-col items-center gap-12">
       <TabMenu />
-      <FormularioTarea isOpen={isOpen} onOpenChange={onOpenChange} />
+      <FormularioTarea isOpen={isOpen} onOpenChange={onOpenChange} getTareas={obtenerTareas} />
       <div className="flex items-center justify-between gap-4 w-11/12">
         <Button
           onPress={onOpenChange}
@@ -65,11 +70,19 @@ export default function Home() {
         </Tooltip>
       </div>
       <div className="w-11/12 flex flex-col items-center gap-6">
-        {tareas.map((tarea: tarea) => {
-          return (
-            <Tarea key={tarea.id} titulo={tarea.titulo} contenido={tarea.contenido} fechaLimite={tarea.fechaLimite} tipo={tarea.tipo} />
-          );
-        })}
+        {
+          tareas.map((tarea: tarea) => {
+            return (
+              <Tarea
+                key={tarea.id}
+                titulo={tarea.titulo}
+                contenido={tarea.contenido}
+                fechaLimite={tarea.fechaLimite}
+                tipo={tarea.tipo}
+              />
+            );
+          }) 
+        }
       </div>
     </div>
   );

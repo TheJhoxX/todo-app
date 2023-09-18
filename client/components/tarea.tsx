@@ -2,6 +2,7 @@ import { Button, Checkbox, Tooltip, Chip } from "@nextui-org/react";
 import { useState } from "react";
 import EyeIcon from "./eyeIcon";
 import DetallesDeTarea from "./DetallesDeTarea";
+import { stringify } from "querystring";
 
 interface detallesTarea {
   titulo: string;
@@ -18,6 +19,12 @@ export default function Tarea({
 }: detallesTarea) {
   const [isSelected, setIsSelected] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const fecha = new Date(fechaLimite)
+  const dia = fecha.getDate()
+  const mes = fecha.getMonth()
+  const annyo = fecha.getFullYear()
+  const hora = fecha.getHours()
+  const minuto = fecha.getMinutes()
 
   const onOpenChange = () => {
     setIsOpen(!isOpen);
@@ -83,7 +90,7 @@ export default function Tarea({
             </Checkbox>
           </div>
           <h1 className="text-gray-500 text-medium md:hidden lg:hidden">
-            15-11-2002
+            {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}
           </h1>
         </div>
         <div className="flex justify-between items-center w-full md:justify-end lg:justify-end gap-2 ">
@@ -91,7 +98,7 @@ export default function Tarea({
             {tipo}
           </Chip>
           <h1 className=" md:text-gray-500 md:text-sm lg:text-medium lg:text-gray-500">
-            15-11-2002
+            {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}
           </h1>
           <Tooltip content="Ver detalles de la tarea">
             <Button onPress={onOpenChange} className="bg-gray-200" size="sm">

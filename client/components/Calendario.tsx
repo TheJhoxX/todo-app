@@ -16,6 +16,14 @@ export default function Example({ cambiarFechaSeleccionada }: CalendarioProps) {
     setSelected(date);
     cambiarFechaSeleccionada(date);
   }
+
+  const isDateDisabled = (date: Date) => {
+    // Obtén la fecha actual
+    const today = new Date();
+
+    // Compara la fecha seleccionada con la fecha actual
+    return date <= today;
+  };
   
     
   let footer = <p>Selecciona un dia</p>;
@@ -30,6 +38,9 @@ export default function Example({ cambiarFechaSeleccionada }: CalendarioProps) {
         selected={selected}
         onSelect={handleValorLocal}
         footer={footer}
+        required
+        onDayClick={(date) => setSelected(date)}
+        disabled={isDateDisabled}
       />
       </>
   );

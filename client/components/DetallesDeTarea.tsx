@@ -6,6 +6,7 @@ import {
   ModalFooter,
   Button,
   Chip,
+  Divider,
 } from "@nextui-org/react";
 
 interface detallesTarea {
@@ -35,6 +36,13 @@ export default function DetallesDeTarea({
     }
   };
 
+  const fecha = new Date(fechaLimite);
+  const dia = fecha.getDate();
+  const mes = fecha.getMonth();
+  const annyo = fecha.getFullYear();
+  const hora = fecha.getHours();
+  const minuto = fecha.getMinutes();
+
   return (
     <>
       <Modal
@@ -50,6 +58,7 @@ export default function DetallesDeTarea({
               <ModalHeader className="flex items-center justify-center capitalize">
                 <h1 className="text-xl">{titulo}</h1>
               </ModalHeader>
+              <Divider />
               <ModalBody className="flex flex-col items-center gap-4">
                 <p>{contenido}</p>
               </ModalBody>
@@ -58,7 +67,9 @@ export default function DetallesDeTarea({
                   <Chip size="sm" variant="flat" color={color()}>
                     {tipo}
                   </Chip>
-                  <p>15-11-2002</p>
+                  <p>
+                    {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}
+                  </p>
                 </div>
                 <div className="flex items-center justify-end gap-2 w/12">
                   <Button color={color()} radius="lg" onPress={onClose}>

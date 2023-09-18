@@ -23,6 +23,26 @@ app.use(
   })
 );
 
+
+const comprobarDatosDeFormulario = (data) => {
+  const { titulo, contenido, hora, fecha, tipo } = data;
+  console.log(data)
+  const validezDelFormulario = { formularioCorrecto: true, campos: {} }
+  if ((!data.titulo) || (!data.contenido) || (!data.hora) || (!data.fecha) || (!data.tipo)) {
+    validezDelFormulario.formularioCorrecto = false
+  }
+  data.titulo ? validezDelFormulario.campos.titulo = true : validezDelFormulario.campos.titulo = false
+  data.contenido ? validezDelFormulario.campos.contenido = true : validezDelFormulario.campos.contenido = false
+  data.hora ? validezDelFormulario.campos.hora = true : validezDelFormulario.campos.hora = false
+  data.fecha ? validezDelFormulario.campos.fecha = true : validezDelFormulario.campos.fecha = false
+  data.tipo ? validezDelFormulario.campos.tipo = true : validezDelFormulario.campos.tipo = false
+
+  console.log(JSON.stringify(validezDelFormulario))
+  return validezDelFormulario 
+}
+
+
+
 app.post("/iniciarSesion", async (req, res) => {
   if (!req.session.user) {
     controladorUsuarios.comprobarCredenciales(
@@ -99,6 +119,40 @@ app.get("/tareas", async (req, res) => {
   } else {
     console.log("Usuario no identificado");
   }
+});
+
+app.post("/nuevaTarea", async (req, res) => {
+
+  const validezDelFormulario = comprobarDatosDeFormulario(req.body)
+  if (validezDelFormulario.formularioCorrecto === false) {
+    res
+    .status(401)
+    .json(validezDelFormulario)
+  } else {
+    const data = req.body
+    data.idUsuario = req.session.user.userId
+    controladorTareas.crearTarea((errors, results) => {
+      if (errors) {
+        console.error('ERROR: ' + errors)
+        res.status(401).send("No se ha podido añadir la tarea:    " + errors);
+      } else {
+        res
+          .status(200)
+          .json({
+            formularioCorrecto: true,
+            campos: {
+              titulo: true,
+              contenido: true,
+              hora: true,
+              fecha: true,
+              tipo: true,
+            },
+          });
+      }
+    }, data);
+  }
+
+  
 });
 
 app.listen(PORT, () => {
