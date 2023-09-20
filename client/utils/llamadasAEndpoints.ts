@@ -1,4 +1,5 @@
 import { error } from "console";
+import { da } from "date-fns/locale";
 import { Result } from "postcss";
 
 const iniciarSesion = async (userName: String, password: String) => {
@@ -81,7 +82,8 @@ const nuevaTarea = async (
       body: JSON.stringify({ titulo, contenido, hora, fecha, tipo }),
     });
     if (!response.ok) {
-      throw new Error ("Se ha producido un error al obtener las tareas")
+      const data = await response.json()
+      return data
     }
     const data = await response.json()
     alert(JSON.stringify(data))

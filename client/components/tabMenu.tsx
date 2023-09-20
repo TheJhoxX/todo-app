@@ -1,7 +1,15 @@
 import { Tabs, Tab } from "@nextui-org/react";
+import { Key } from "react";
 
-export default function tabMenu() {
+interface tabMenuProps {
+  selectedTab: string,
+  handleSelectionChange: (key: Key) => any
+}
+
+export default function TabMenu({selectedTab, handleSelectionChange}: tabMenuProps) {
+
   return (
+
     <div className="w-11/12 flex items-center justify-center">
       <div className="flex items-center justify-center w-full md:w-1/2 lg:w-1/2">
         <Tabs
@@ -10,6 +18,8 @@ export default function tabMenu() {
           radius="full"
           variant="bordered"
           fullWidth={true}
+          selectedKey={selectedTab}
+          onSelectionChange={handleSelectionChange}
         >
           <Tab key="todas" title="Todas"></Tab>
           <Tab key="importante" title="Importante"></Tab>
@@ -19,4 +29,5 @@ export default function tabMenu() {
       </div>
     </div>
   );
+
 }

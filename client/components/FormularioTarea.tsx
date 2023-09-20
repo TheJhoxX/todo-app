@@ -39,9 +39,10 @@ export default function MiComponente({
 
   const [tipo, setTipo] = React.useState<Selection>(new Set([]));
   const [fechaSeleccionada, setFechaSeleccionada] = React.useState<Date | undefined>();
-  const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>()
+  const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>(' ')
   const [tituloValido, setTituloValido] = React.useState<Boolean>(true);
   const [contenidoValido, setContenidoValido] = React.useState<Boolean>(true);
+  const [errores, setErrores] = React.useState<String | undefined>()
 
 
 
@@ -62,8 +63,6 @@ export default function MiComponente({
   }
 
   const handleCambioHora = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value)
-
     setHoraSeleccionada(event.target.value)
   }
 
@@ -79,12 +78,10 @@ export default function MiComponente({
       .nuevaTarea(titulo,contenido, hora, fecha?.toISOString(), tipoDeTarea.currentKey)
       .then((camposCorrectos : camposFormulario) => {
         if (camposCorrectos.formularioCorrecto === false) {
-          if (!camposCorrectos.campos.titulo) {
-            setTituloValido(false)
-          }
-          if (!camposCorrectos.campos.contenido) {
-            setContenidoValido(false)
-          }
+          setErrores('Faltan campos por rellenar')
+          !camposCorrectos.campos.titulo ? setTituloValido(false) : setTituloValido(true)
+          !camposCorrectos.campos.contenido ? setContenidoValido(false) : setContenidoValido(true)
+          camposCorrectos.campos.hora ? setHoraSeleccionada(undefined) : setContenidoValido(camposCorrectos.campos.hora)
         } 
         else {
           getTareas()
@@ -129,6 +126,7 @@ export default function MiComponente({
                   label="Contenido"
                   description="Datos adicionales / una descripción sobre la tarea"
                   ref={contenidoRef}
+                  validationState={contenidoValido ? "valid" : "invalid"}
                 />
                 <Select
                   selectionMode="single"
@@ -141,6 +139,7 @@ export default function MiComponente({
                   isRequired
                   radius="lg"
                   variant="flat"
+                  description={Array.from(tipo).length > 0 ? '' : 'Selecciona la importancia de la tarea'}
                 >
                   <SelectItem key={"normal"} value={"normal"}>
                     Normal
@@ -156,21 +155,36 @@ export default function MiComponente({
                   <p>Selecciona una hora y un dia:</p>
                   <p className="text-danger">*</p>
                 </div>
-                <input type="time" className="rounded-lg text-center p-4" onChange={handleCambioHora} />
-                <Calendario cambiarFechaSeleccionada={handleFechaSeleccionada} />
+                <input
+                  type="time"
+                  className={`rounded-lg text-center p-4 transition duration-300 ${horaSeleccionada ? '' : 'bg-danger'}`}
+                  onChange={handleCambioHora}
+                />
+                <Calendario
+                  cambiarFechaSeleccionada={handleFechaSeleccionada}
+                />
               </ModalBody>
-              <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="flat"
-                  radius="lg"
-                  onPress={onClose}
-                >
-                  Cancelar
-                </Button>
-                <Button color="primary" radius="lg" onPress={handleNuevaTarea}>
-                  Añadir
-                </Button>
+              <ModalFooter className="flex items-center justify-between gap-4">
+                <div className="w-3/5">
+                  <p className="text-danger">{ errores }</p>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <Button
+                    color="danger"
+                    variant="flat"
+                    radius="lg"
+                    onPress={onClose}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    color="primary"
+                    radius="lg"
+                    onPress={handleNuevaTarea}
+                  >
+                    Añadir
+                  </Button>
+                </div>
               </ModalFooter>
             </>
           )}

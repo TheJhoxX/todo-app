@@ -1,9 +1,10 @@
 "use client";
 import { Button, Tooltip, useDisclosure } from "@nextui-org/react";
 import Tarea from "@/components/tarea";
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 const llamadasAEndpoints = require("../../utils/llamadasAEndpoints");
 import TabMenu from "@/components/tabMenu";
+
 import FormularioTarea from "@/components/FormularioTarea";
 
 interface tarea {
@@ -17,8 +18,12 @@ interface tarea {
 
 export default function Home() {
   const [tareas, setTareas] = useState<tarea[]>([]);
-
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedTab, setSelectedTab] = useState<string>("todas");
+
+  const handleSelectionChange = (key: Key) => {
+    setSelectedTab(key.toString())
+  }
 
   const onOpenChange = () => {
     setIsOpen(!isOpen);
@@ -46,8 +51,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-full h-screen flex flex-col items-center gap-12">
-      <TabMenu />
+    <div className="w-full flex flex-col items-center gap-12">
+      <TabMenu selectedTab={selectedTab} handleSelectionChange={handleSelectionChange} />
       <FormularioTarea isOpen={isOpen} onOpenChange={onOpenChange} getTareas={obtenerTareas} />
       <div className="flex items-center justify-between gap-4 w-11/12">
         <Button
@@ -72,15 +77,28 @@ export default function Home() {
       <div className="w-11/12 flex flex-col items-center gap-6">
         {
           tareas.map((tarea: tarea) => {
-            return (
-              <Tarea
-                key={tarea.id}
-                titulo={tarea.titulo}
-                contenido={tarea.contenido}
-                fechaLimite={tarea.fechaLimite}
-                tipo={tarea.tipo}
-              />
-            );
+            if (selectedTab === "todas") {
+              return (
+                <Tarea
+                  key={tarea.id}
+                  titulo={tarea.titulo}
+                  contenido={tarea.contenido}
+                  fechaLimite={tarea.fechaLimite}
+                  tipo={tarea.tipo}
+                />
+              )
+            }
+            if (tarea.tipo === selectedTab) {
+              return (
+                <Tarea
+                  key={tarea.id}
+                  titulo={tarea.titulo}
+                  contenido={tarea.contenido}
+                  fechaLimite={tarea.fechaLimite}
+                  tipo={tarea.tipo}
+                />
+              )
+            }
           }) 
         }
       </div>

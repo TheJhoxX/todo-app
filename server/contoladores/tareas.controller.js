@@ -2,7 +2,7 @@ const pool = require("../conexion");
 
 function obtenerTareasDeUsuario(callback, data) {
   pool.query(
-    "SELECT * FROM tareas WHERE idUsuario = ? ORDER BY fechaLimite DESC",
+    "SELECT * FROM tareas WHERE idUsuario = ? ORDER BY fechaLimite ASC",
     [data.userId],
     (error, results) => {
       if (error) {

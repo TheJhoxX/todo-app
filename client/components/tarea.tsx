@@ -2,7 +2,6 @@ import { Button, Checkbox, Tooltip, Chip } from "@nextui-org/react";
 import { useState } from "react";
 import EyeIcon from "./eyeIcon";
 import DetallesDeTarea from "./DetallesDeTarea";
-import { stringify } from "querystring";
 
 interface detallesTarea {
   titulo: string;
@@ -97,7 +96,7 @@ export default function Tarea({
           <Chip size="sm" variant="flat" color={importancia()}>
             {tipo}
           </Chip>
-          <h1 className=" md:text-gray-500 md:text-sm lg:text-medium lg:text-gray-500">
+          <h1 className="hidden md:block md:text-gray-500 md:text-sm lg:block lg:text-medium lg:text-gray-500">
             {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}
           </h1>
           <Tooltip content="Ver detalles de la tarea">
