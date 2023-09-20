@@ -28,7 +28,7 @@ interface camposFormulario  {
   };
 };
 
-export default function MiComponente({
+export default function FormularioTarea({
   isOpen,
   onOpenChange,
   getTareas,
@@ -54,7 +54,7 @@ export default function MiComponente({
     } else if (Array.from(tipo)[0] === "importante") {
       return "danger";
     } else {
-      return null;
+      return "default";
     }
   };
 

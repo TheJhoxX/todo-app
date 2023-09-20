@@ -1,5 +1,5 @@
 
-export default function TodoList() {
+export default function SvgLista() {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"

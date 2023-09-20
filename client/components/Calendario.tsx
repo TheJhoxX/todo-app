@@ -9,7 +9,7 @@ interface CalendarioProps {
     cambiarFechaSeleccionada: (selected: Date | undefined) => void;
 }
 
-export default function Example({ cambiarFechaSeleccionada }: CalendarioProps) {
+export default function Calendario({ cambiarFechaSeleccionada }: CalendarioProps) {
   const [selected, setSelected] = React.useState<Date>();
 
   const handleValorLocal = (date: Date | undefined) => {

@@ -8,7 +8,7 @@ import {
   CardFooter,
   Divider,
 } from "@nextui-org/react";
-import SvgLista from "../components/svgLista";
+import SvgLista from "@/components/SvgLista";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 

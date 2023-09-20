@@ -1,7 +1,7 @@
 import { Button, Checkbox, Tooltip, Chip } from "@nextui-org/react";
 import { useState } from "react";
-import EyeIcon from "./eyeIcon";
 import DetallesDeTarea from "./DetallesDeTarea";
+import EyeIcon from "./EyeIcon";
 
 interface detallesTarea {
   titulo: string;

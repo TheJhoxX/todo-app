@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import React from "react";
 
-import SvgLista from "./svgLista";
+import SvgLista from "./SvgLista";
 
 
 export default function MiNavbar() {
