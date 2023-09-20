@@ -95,9 +95,30 @@ const nuevaTarea = async (
   }
 };
 
+const cerrarSesion = async () => {
+  try {
+    const response = await fetch("http://localhost:3001/cerrarSesion", {
+      method: "POST",
+      credentials: "include",
+    })
+    if (!response.ok) {
+      const data = await response
+      return data
+    }
+    const data = await response
+    alert("Sesión cerrada correctamente")
+    return data
+  }
+  catch (error) {
+    console.error("Se ha producido un error al cerrar sesión")
+    throw error
+  }
+}
+
 module.exports = {
   iniciarSesion,
   registrarUsuario,
   obtenerTareasDeUsuario,
   nuevaTarea,
+  cerrarSesion,
 };

@@ -26,7 +26,6 @@ app.use(
 
 const comprobarDatosDeFormulario = (data) => {
   const { titulo, contenido, hora, fecha, tipo } = data;
-  console.log(data)
   const validezDelFormulario = { formularioCorrecto: true, campos: {} }
   if ((!data.titulo) || (!data.contenido) || (!data.hora) || (!data.fecha) || (!data.tipo)) {
     validezDelFormulario.formularioCorrecto = false
@@ -84,6 +83,15 @@ app.post("/iniciarSesion", async (req, res) => {
   }
 });
 
+app.post("/cerrarSesion", async (req, res) => {
+  if (req.session.user) {
+    req.session.user = undefined
+    res.status(200).send("Sesión cerrada correctamente")
+  } else {
+    res.status(401).send("No hay sesión que cerrar")
+  }
+})
+
 app.post("/registrarUsuario", async (req, res) => {
   controladorUsuarios.registrarUsuario((errors, results) => {
     if (errors) {
@@ -101,7 +109,6 @@ app.post("/registrarUsuario", async (req, res) => {
 });
 
 app.get("/tareas", async (req, res) => {
-  console.log("Usuario registrado en la cookie: "  + JSON.stringify(req.session.user))
   if (req.session.user) {
     controladorTareas.obtenerTareasDeUsuario((errors, results) => {
       if (errors) {
@@ -112,12 +119,10 @@ app.get("/tareas", async (req, res) => {
               errors
           );
       } else {
-        console.log(results)
         res.status(200).json(results);
       }
     }, req.session.user);
   } else {
-    console.log("Usuario no identificado");
   }
 });
 
@@ -151,8 +156,6 @@ app.post("/nuevaTarea", async (req, res) => {
       }
     }, data);
   }
-
-  
 });
 
 app.listen(PORT, () => {

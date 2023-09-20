@@ -1,6 +1,6 @@
 "use client";
 import { Button, Tooltip } from "@nextui-org/react";
-import Tarea from "@/components/tarea";
+import Tarea from "@/components/Tarea";
 import { Key, useEffect, useState } from "react";
 const llamadasAEndpoints = require("../../utils/llamadasAEndpoints");
 import TabMenu from "@/components/TabMenu";

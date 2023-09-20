@@ -39,7 +39,7 @@ export default function FormularioTarea({
 
   const [tipo, setTipo] = React.useState<Selection>(new Set([]));
   const [fechaSeleccionada, setFechaSeleccionada] = React.useState<Date | undefined>();
-  const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>(' ')
+  const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>()
   const [tituloValido, setTituloValido] = React.useState<Boolean>(true);
   const [contenidoValido, setContenidoValido] = React.useState<Boolean>(true);
   const [errores, setErrores] = React.useState<String | undefined>()
@@ -76,7 +76,8 @@ export default function FormularioTarea({
 
     llamadasAEndpoints
       .nuevaTarea(titulo,contenido, hora, fecha?.toISOString(), tipoDeTarea.currentKey)
-      .then((camposCorrectos : camposFormulario) => {
+      .then((camposCorrectos: camposFormulario) => {
+        console.log(JSON.stringify(camposCorrectos))
         if (camposCorrectos.formularioCorrecto === false) {
           setErrores('Faltan campos por rellenar')
           !camposCorrectos.campos.titulo ? setTituloValido(false) : setTituloValido(true)
