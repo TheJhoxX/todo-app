@@ -7,7 +7,10 @@ import {
   Button,
   Chip,
   Divider,
+  ModalProps,
+  ScrollShadow,
 } from "@nextui-org/react";
+import React from "react";
 
 interface detallesTarea {
   isOpen: boolean;
@@ -26,6 +29,9 @@ export default function DetallesDeTarea({
   tipo,
   fechaLimite,
 }: detallesTarea) {
+
+  const [scrollBehavior, setScrollBehavior] = React.useState<ModalProps["scrollBehavior"]>("inside");
+
   const color = () => {
     if (tipo === "normal") {
       return "primary";
@@ -51,16 +57,31 @@ export default function DetallesDeTarea({
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         shadow="lg"
+        size="md"
       >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex items-center justify-center capitalize">
-                <h1 className="text-xl">{titulo}</h1>
+              <ModalHeader className="w-full flex items-center justify-center capitalize">
+                <ScrollShadow
+                  className="flex w-11/12 gap-2 items-center justify-center"
+                  orientation="horizontal"
+                  size={8}
+                >
+                  <h1 className="text-xl overflow-x-scroll">{titulo}</h1>
+                </ScrollShadow>
               </ModalHeader>
               <Divider />
-              <ModalBody className="flex flex-col items-center gap-4">
-                <p>{contenido}</p>
+              <ModalBody className="w-full">
+                <ScrollShadow
+                  className="w-full flex items-start justify-center"
+                  orientation="vertical"
+                  size={8}
+                >
+                  <p className="w-full p-4 text-justify break-words whitespace-pre-line bg-gray-800 rounded-lg ">
+                    {contenido}
+                  </p>
+                </ScrollShadow>
               </ModalBody>
               <ModalFooter className="flex items-center justify-between gap-2">
                 <div className="flex flex-col items-center justify-center gap-2 w/12">

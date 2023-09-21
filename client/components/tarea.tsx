@@ -1,4 +1,4 @@
-import { Button, Checkbox, Tooltip, Chip } from "@nextui-org/react";
+import { Button, Checkbox, Tooltip, Chip, ScrollShadow } from "@nextui-org/react";
 import { useState } from "react";
 import DetallesDeTarea from "./DetallesDeTarea";
 import EyeIcon from "./EyeIcon";
@@ -18,12 +18,12 @@ export default function Tarea({
 }: detallesTarea) {
   const [isSelected, setIsSelected] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const fecha = new Date(fechaLimite)
-  const dia = fecha.getDate()
-  const mes = fecha.getMonth()
-  const annyo = fecha.getFullYear()
-  const hora = fecha.getHours()
-  const minuto = fecha.getMinutes()
+  const fecha = new Date(fechaLimite);
+  const dia = fecha.getDate();
+  const mes = fecha.getMonth();
+  const annyo = fecha.getFullYear();
+  const hora = fecha.getHours();
+  const minuto = fecha.getMinutes();
 
   const onOpenChange = () => {
     setIsOpen(!isOpen);
@@ -78,15 +78,21 @@ export default function Tarea({
         onClick={handleClick}
       >
         <div className="flex flex-col gap-2 items-center justify-center w-full md:justify-start lg:w-1/2 lg:justify-start">
-          <div className=" w-full flex items-center justify-center md:justify-start lg:justify-start ">
-            <Checkbox
-              isSelected={isSelected}
-              onValueChange={handleClick}
-              color={importancia()}
-              lineThrough
-            >
-              <p className="font-bold text-black">{titulo}</p>
-            </Checkbox>
+          <div
+            className="w-full max-w-full overflow-x-scroll flex items-center justify-center  
+          md:max-w-lg md:overflow-hidden md:justify-start
+          lg:max-w-lg lg:overflow-x-scroll lg:justify-start "
+          >
+            <ScrollShadow orientation="horizontal" size={4}>
+              <Checkbox
+                isSelected={isSelected}
+                onValueChange={handleClick}
+                color={importancia()}
+                lineThrough
+              >
+                <p className="font-bold text-black">{titulo}</p>
+              </Checkbox>
+            </ScrollShadow>
           </div>
           <h1 className="text-gray-500 text-medium md:hidden lg:hidden">
             {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}

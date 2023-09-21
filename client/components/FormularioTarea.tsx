@@ -43,7 +43,7 @@ export default function FormularioTarea({
   const [tituloValido, setTituloValido] = React.useState<Boolean>(true);
   const [contenidoValido, setContenidoValido] = React.useState<Boolean>(true);
   const [errores, setErrores] = React.useState<String | undefined>()
-
+  const [longitudContenido, setLongitudContenido] = React.useState(0)
 
 
   const color = () => {
@@ -125,9 +125,15 @@ export default function FormularioTarea({
                   radius="lg"
                   size="md"
                   label="Contenido"
-                  description="Datos adicionales / una descripción sobre la tarea"
+                  onChange={() => { 
+                    if (contenidoRef.current.value.length <= 1000) {
+                      setLongitudContenido(contenidoRef.current.value.length)
+                    }
+                  }}
+                  description={"Una descripción de la tarea a realizar. (" + longitudContenido + "/1000)"}
                   ref={contenidoRef}
                   validationState={contenidoValido ? "valid" : "invalid"}
+                  maxLength={1000}
                 />
                 <Select
                   selectionMode="single"
