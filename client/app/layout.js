@@ -8,8 +8,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className="h-screeen overflow-scroll">
-      <body className="dark h-full">
+    <html lang="es" className="h-full overflow-scroll">
+      <body className="dark min-h-full">
         <Providers>
           {children}
         </Providers>

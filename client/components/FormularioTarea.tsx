@@ -181,7 +181,10 @@ export default function FormularioTarea({
                   <Button
                     color="primary"
                     radius="lg"
-                    onPress={handleNuevaTarea}
+                    onPress={() => {
+                      handleNuevaTarea();
+                      onClose();
+                    }}
                   >
                     Añadir
                   </Button>
