@@ -1,7 +1,7 @@
-import { Button, Checkbox, Tooltip, Chip, ScrollShadow } from "@nextui-org/react";
+import { Button, Checkbox, Tooltip, Chip } from "@nextui-org/react";
 import { useState } from "react";
 import DetallesDeTarea from "./DetallesDeTarea";
-import EyeIcon from "./EyeIcon";
+import EyeIcon from "./eyeIcon";
 
 interface detallesTarea {
   titulo: string;
@@ -67,38 +67,48 @@ export default function Tarea({
     setIsSelected(!isSelected);
   };
 
+
   return (
     <>
       <div
-        className={`rounded-xl p-3 w-full 
-    flex flex-col md:flex-row lg:flex-row items-center 
-    justify-between md:gap-4 lg:gap-4
-    transition duration-1000 bg-white
-    ${sombra()} hover:cursor-pointer`}
+        className={`rounded-xl p-3 w-full justify-between ${sombra()} hover:cursor-pointer transition duration-1000 bg-white
+        flex flex-col items-center 
+        md:flex-row md:items-center md:justify-between md:gap-4 
+        lg:flex-row lg:items-center lg:justify-between lg:gap-4`}
         onClick={handleClick}
       >
-        <div className="flex flex-col gap-2 items-center justify-center w-full md:justify-start lg:w-1/2 lg:justify-start">
+        <div
+          className="flex flex-col gap-2 items-center justify-center w-full 
+        md:w-1/2 md:justify-start
+        lg:w-1/2 lg:justify-start"
+        >
           <div
-            className="w-full max-w-full overflow-x-scroll flex items-center justify-center  
-          md:max-w-lg md:overflow-hidden md:justify-start
-          lg:max-w-lg lg:overflow-x-scroll lg:justify-start "
+            className="w-full max-w-full flex items-center justify-center 
+          md:w-full md:justify-start
+          lg:w-full lg:justify-start "
           >
-            <ScrollShadow orientation="horizontal" size={4}>
-              <Checkbox
-                isSelected={isSelected}
-                onValueChange={handleClick}
-                color={importancia()}
-                lineThrough
-              >
-                <p className="font-bold text-black">{titulo}</p>
-              </Checkbox>
-            </ScrollShadow>
+            <Checkbox
+              isSelected={isSelected}
+              onValueChange={handleClick}
+              color={importancia()}
+              lineThrough
+              className="w-full"
+            >
+              <p className="font-bold text-black break-words text-justify">
+                {titulo.length > 30 ? titulo.slice(0,30) + "..." : titulo}
+              </p>
+            </Checkbox>
           </div>
           <h1 className="text-gray-500 text-medium md:hidden lg:hidden">
             {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}
           </h1>
         </div>
-        <div className="flex justify-between items-center w-full md:justify-end lg:justify-end gap-2 ">
+
+        <div
+          className="flex justify-between items-center w-full gap-2
+        md:justify-end md:w-1/2
+        lg:justify-end lg:w-1/2  "
+        >
           <Chip size="sm" variant="flat" color={importancia()}>
             {tipo}
           </Chip>
@@ -112,6 +122,7 @@ export default function Tarea({
           </Tooltip>
         </div>
       </div>
+
       <DetallesDeTarea
         isOpen={isOpen}
         onOpenChange={onOpenChange}
