@@ -44,6 +44,7 @@ export default function FormularioTarea({
   const [contenidoValido, setContenidoValido] = React.useState<Boolean>(true);
   const [errores, setErrores] = React.useState<String | undefined>()
   const [longitudContenido, setLongitudContenido] = React.useState(0)
+  const [longitudTitulo, setLongitudTitulo] = React.useState(0)
 
 
   const color = () => {
@@ -113,8 +114,14 @@ export default function FormularioTarea({
                   radius="lg"
                   size="md"
                   label="Título"
-                  description="Título que aparecerá al visualizar las tareas"
+                  description={"Titulo que se va visualizar en las tareas. (" + longitudTitulo + "/60)"}
                   validationState={tituloValido ? "valid" : "invalid"}
+                  maxLength={60}
+                  onChange={() => { 
+                    if (tituloRef.current.value.length <= 1000) {
+                      setLongitudTitulo(tituloRef.current.value.length)
+                    }
+                  }}
                   ref={tituloRef}
                 />
                 <Textarea

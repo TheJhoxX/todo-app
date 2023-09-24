@@ -12,7 +12,6 @@ const iniciarSesion = async (userName: String, password: String) => {
       },
       body: JSON.stringify({ userName, password }),
     });
-    console.log(response)
     if (response.ok) {
       return true
     } else {
@@ -115,10 +114,37 @@ const cerrarSesion = async () => {
   }
 }
 
+const eliminarTareas = async (
+  identificadores: number[]
+) => {
+  try {
+    const response = await fetch("http://localhost:3001/eliminarTareas", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ identificadores }),
+    })
+    if (!response.ok) {
+      const data = await response.json()
+      return data
+    }
+    const data = await response.json()
+    alert("Tareas eliminadas correctamente" + JSON.stringify(data))
+    return data
+  }
+  catch (error) {
+    console.error("Se ha producido un error al eliminar las tareas")
+    throw error
+  }
+}
+
 module.exports = {
   iniciarSesion,
   registrarUsuario,
   obtenerTareasDeUsuario,
   nuevaTarea,
   cerrarSesion,
+  eliminarTareas,
 };

@@ -68,7 +68,7 @@ export default function DetallesDeTarea({
                   orientation="horizontal"
                   size={8}
                 >
-                  <h1 className="text-xl overflow-x-scroll">{titulo}</h1>
+                  <h1 className="text-xl overflow-x-scroll text-center">{titulo}</h1>
                 </ScrollShadow>
               </ModalHeader>
               <Divider />

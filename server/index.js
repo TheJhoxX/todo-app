@@ -158,6 +158,28 @@ app.post("/nuevaTarea", async (req, res) => {
   }
 });
 
+app.post("/eliminarTareas", async (req, res) => {
+  console.log('TAREAS:  ' + JSON.stringify(req.body.identificadores))
+  console.log('SESION:  ' + JSON.stringify(req.session.user))
+  if (req.session.user) {
+    controladorTareas.eliminarTareas((errors,results) => {
+      if (errors) {
+        res.status(404).json(
+          {
+            eliminacionCorrecta : false,
+          }
+        )
+      } else {
+        res.status(200).json(
+          {
+            eliminacionCorrecta: true,
+          }
+        )
+      }
+    }, req.body.identificadores)
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

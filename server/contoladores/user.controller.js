@@ -19,7 +19,6 @@ function comprobarCredenciales(callback, data) {
 }
 
 function registrarUsuario(callback, data) {
-  console.log(JSON.stringify(data));
   pool.query(
     "INSERT INTO usuarios (nombre, password) VALUES (?,?)",
     [data.userName, data.password],

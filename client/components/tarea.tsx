@@ -4,17 +4,21 @@ import DetallesDeTarea from "./DetallesDeTarea";
 import EyeIcon from "./eyeIcon";
 
 interface detallesTarea {
+  id: number;
   titulo: string;
   contenido: string;
   tipo: string;
   fechaLimite: string;
+  handleSeleccionTarea: (id: number, quitar: boolean) => void;
 }
 
 export default function Tarea({
+  id,
   titulo,
   contenido,
   tipo,
   fechaLimite,
+  handleSeleccionTarea,
 }: detallesTarea) {
   const [isSelected, setIsSelected] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -65,8 +69,13 @@ export default function Tarea({
 
   const handleClick = () => {
     setIsSelected(!isSelected);
+    if (isSelected) {
+      handleSeleccionTarea(id, false);
+    }
+    else {
+      handleSeleccionTarea(id, true)
+    }
   };
-
 
   return (
     <>
@@ -95,7 +104,7 @@ export default function Tarea({
               className="w-full"
             >
               <p className="font-bold text-black break-words text-justify">
-                {titulo.length > 30 ? titulo.slice(0,30) + "..." : titulo}
+                {titulo.length > 40 ? titulo.slice(0, 40) + "..." : titulo}
               </p>
             </Checkbox>
           </div>

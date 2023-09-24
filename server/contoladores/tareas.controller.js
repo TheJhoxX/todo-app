@@ -36,4 +36,20 @@ function crearTarea(callback, data) {
   );
 }
 
-module.exports = { obtenerTareasDeUsuario, crearTarea };
+function eliminarTareas(callback, data) {
+  const dataList = data.join(',')
+  pool.query(
+    `DELETE FROM tareas WHERE id IN (${dataList})`,
+    [dataList],
+    (errors, results) => {
+      if (errors) {
+        callback(errors, null);
+      } else {
+        callback(null, results);
+      }
+    }
+  );
+}
+
+
+module.exports = { obtenerTareasDeUsuario, crearTarea, eliminarTareas };
