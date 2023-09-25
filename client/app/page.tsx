@@ -19,18 +19,22 @@ export default function App() {
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
 
-  const iniciarSesion = () => {
+  const iniciarSesion = async (primerInicio: boolean) => {
     const userName = usernameRef.current.value;
     const password = passwordRef.current.value;
-    llamadasAEndpoints
-      .iniciarSesion(userName, password)
-      .then((sesionCorrecta: boolean) => {
-        if (sesionCorrecta === false) {
-          cambiarErrores(true);
-        } else {
-          router.push('/home')
-        }
-      });
+    const inicioDeSesion = await llamadasAEndpoints
+      .iniciarSesion(userName, password, primerInicio)
+    
+    console.log(JSON.stringify(inicioDeSesion))
+    
+    if ((inicioDeSesion.primerInicio === false)) {
+      if (inicioDeSesion.sesionCorrecta === true) {
+        router.push("/home")
+      }
+      else {
+        cambiarErrores(true)
+      }
+    }
   };
 
   const registrarUsuario = () => {
@@ -48,8 +52,12 @@ export default function App() {
   };
 
   useEffect(() => {
-    iniciarSesion()
+    iniciarSesion(true)
   },[])
+
+  const handleIniciarSesion = () => {
+    iniciarSesion(false)
+  }
 
   const [inicio, setInicio] = useState(true);
   const [sesionIncorrecta, setSesionIncorrecta] = useState(false);
@@ -95,7 +103,7 @@ export default function App() {
             fullWidth={true}
           />
           <Button
-            onPress={inicio ? iniciarSesion : registrarUsuario}
+            onPress={inicio ? handleIniciarSesion : registrarUsuario}
             className="w-1/2 font-bold transition duration-200"
             color="primary"
             radius="lg"

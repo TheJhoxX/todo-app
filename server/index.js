@@ -43,13 +43,14 @@ const comprobarDatosDeFormulario = (data) => {
 
 
 app.post("/iniciarSesion", async (req, res) => {
-  if (!req.session.user) {
+  console.log(JSON.stringify(req.body))
+  if ((!req.session.user) && (req.body.primerInicio === false)) {
     controladorUsuarios.comprobarCredenciales(
       (errors, credencialesCorrectas, results) => {
         if (errors) {
           res
             .status(401)
-            .send("Nombre de usuario y/o contraseña incorrectos: " + errors);
+            .json({sesionCorrecta: false, primerInicio: false})
         } else {
           if (credencialesCorrectas === true) {
             console.log(results)
@@ -61,12 +62,12 @@ app.post("/iniciarSesion", async (req, res) => {
             console.log("COOKIE:  " + JSON.stringify(req.session.user))
             res
               .status(200)
-              .send("Credenciales correctas: " + JSON.stringify(req.body));
+              .json({sesionCorrecta: true, primerInicio: false})
           } else {
             console.log("Nombre de usuario y/o contraseña incorrectos");
             res
               .status(401)
-              .send("Nombre de usuario y/o contraseña incorrectos");
+              .json({sesionCorrecta:false, primerInicio:false})
           }
         }
       },
@@ -76,10 +77,7 @@ app.post("/iniciarSesion", async (req, res) => {
     console.log("Utilizando la cookie para el inicio de sesión");
     res
       .status(200)
-      .send(
-        "Utilizando la cookie para el inicio de sesión: " +
-          JSON.stringify(req.session)
-      );
+      .json({sesionCorrecta: false, primerInicio: true})
   }
 });
 

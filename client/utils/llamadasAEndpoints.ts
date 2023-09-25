@@ -2,7 +2,7 @@ import { error } from "console";
 import { da } from "date-fns/locale";
 import { Result } from "postcss";
 
-const iniciarSesion = async (userName: String, password: String) => {
+const iniciarSesion = async (userName: String, password: String, primerInicio: boolean) => {
   try {
     const response = await fetch("http://localhost:3001/iniciarSesion", {
       method: "POST",
@@ -10,15 +10,17 @@ const iniciarSesion = async (userName: String, password: String) => {
       headers: {
         "Content-type": "application/json",
       },
-      body: JSON.stringify({ userName, password }),
+      body: JSON.stringify({ userName, password, primerInicio }),
     });
     if (response.ok) {
-      return true
+      const data = await response.json()
+      return data
     } else {
-      return false
+      const data = await response.json()
+      return data
     }
   } catch (error) {
-    return false
+    alert("Se ha producido un error al iniciar sesión")
   }
 };
 
