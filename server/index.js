@@ -27,14 +27,14 @@ app.use(
 const comprobarDatosDeFormulario = (data) => {
   const { titulo, contenido, hora, fecha, tipo } = data;
   const validezDelFormulario = { formularioCorrecto: true, campos: {} }
-  if ((!data.titulo) || (!data.contenido) || (!data.hora) || (!data.fecha) || (!data.tipo)) {
+  if ((!titulo) || (!contenido) || (!hora) || (!fecha) || (!tipo)) {
     validezDelFormulario.formularioCorrecto = false
   }
-  data.titulo ? validezDelFormulario.campos.titulo = true : validezDelFormulario.campos.titulo = false
-  data.contenido ? validezDelFormulario.campos.contenido = true : validezDelFormulario.campos.contenido = false
-  data.hora ? validezDelFormulario.campos.hora = true : validezDelFormulario.campos.hora = false
-  data.fecha ? validezDelFormulario.campos.fecha = true : validezDelFormulario.campos.fecha = false
-  data.tipo ? validezDelFormulario.campos.tipo = true : validezDelFormulario.campos.tipo = false
+  titulo ? validezDelFormulario.campos.titulo = true : validezDelFormulario.campos.titulo = false
+  contenido ? validezDelFormulario.campos.contenido = true : validezDelFormulario.campos.contenido = false
+  hora ? validezDelFormulario.campos.hora = true : validezDelFormulario.campos.hora = false
+  fecha ? validezDelFormulario.campos.fecha = true : validezDelFormulario.campos.fecha = false
+  tipo ? validezDelFormulario.campos.tipo = true : validezDelFormulario.campos.tipo = false
 
   console.log(JSON.stringify(validezDelFormulario))
   return validezDelFormulario 

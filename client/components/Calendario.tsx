@@ -20,9 +20,7 @@ export default function Calendario({ cambiarFechaSeleccionada }: CalendarioProps
   const isDateDisabled = (date: Date) => {
     // Obtén la fecha actual
     const today = new Date();
-
-    // Compara la fecha seleccionada con la fecha actual
-    return date <= today;
+    return ((date.getDate() < today.getDate()) && (date.getMonth() <= today.getMonth()))
   };
   
     
