@@ -2,6 +2,7 @@ import { Button, Checkbox, Tooltip, Chip } from "@nextui-org/react";
 import { useState } from "react";
 import DetallesDeTarea from "./DetallesDeTarea";
 import EyeIcon from "./eyeIcon";
+import DangerIcon from "./DangerIcon";
 
 interface detallesTarea {
   id: number;
@@ -71,17 +72,25 @@ export default function Tarea({
     setIsSelected(!isSelected);
     if (isSelected) {
       handleSeleccionTarea(id, false);
+    } else {
+      handleSeleccionTarea(id, true);
     }
-    else {
-      handleSeleccionTarea(id, true)
+  };
+
+  const tareaFueraDeFecha = (): boolean => {
+    if (new Date(fechaLimite) < new Date()) {
+      return true;
+    } else {
+      return false;
     }
   };
 
   return (
     <>
       <div
-        className={`rounded-xl p-3 w-full justify-between ${sombra()} hover:cursor-pointer transition duration-1000 bg-white
-        flex flex-col items-center 
+        className={`rounded-xl p-3 w-full justify-between ${sombra()} hover:cursor-pointer transition duration-1000 
+        ${tareaFueraDeFecha() ? "bg-warning" : "bg-white"}
+        flex flex-col items-center relative
         md:flex-row md:items-center md:justify-between md:gap-4 
         lg:flex-row lg:items-center lg:justify-between lg:gap-4`}
         onClick={handleClick}
@@ -108,27 +117,42 @@ export default function Tarea({
               </p>
             </Checkbox>
           </div>
-          <h1 className="text-gray-500 text-medium md:hidden lg:hidden">
+          <h1
+            className={`${
+              tareaFueraDeFecha() ? "text-white font-semibold" : "text-gray-500"
+            } flex items-center gap-2 text-medium md:hidden lg:hidden`}
+          >
             {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}
+            { tareaFueraDeFecha() ? <DangerIcon /> : null }
           </h1>
         </div>
 
+        {/* PARTE DE INFORMACIÓN */}
         <div
           className="flex justify-between items-center w-full gap-2
         md:justify-end md:w-1/2
         lg:justify-end lg:w-1/2  "
         >
-          <Chip size="sm" variant="flat" color={importancia()}>
+          <Chip size="sm" 
+          variant={`${tareaFueraDeFecha() ? 'shadow' : "shadow"}`} color={importancia()}>
             {tipo}
           </Chip>
-          <h1 className="hidden md:block md:text-gray-500 md:text-sm lg:block lg:text-medium lg:text-gray-500">
+          <h1
+            className={`hidden md:flex md:items-center md:gap-2 ${
+              tareaFueraDeFecha()
+                ? "md:text-white font-semibold  lg:text-white lg:font-semibold "
+                : "md:text-gray-500 lg:text-gray-500"
+            } md:text-sm lg:flex lg:items-center lg:gap-2 lg:text-medium `}
+          >
             {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}
+            { tareaFueraDeFecha() ? <DangerIcon /> : null }
           </h1>
           <Tooltip content="Ver detalles de la tarea">
             <Button onPress={onOpenChange} className="bg-gray-200" size="sm">
               <EyeIcon />
             </Button>
           </Tooltip>
+          
         </div>
       </div>
 
@@ -139,6 +163,7 @@ export default function Tarea({
         contenido={contenido}
         fechaLimite={fechaLimite}
         tipo={tipo}
+        tareaFueraDeFecha={tareaFueraDeFecha()}
       />
     </>
   );

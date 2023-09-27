@@ -39,7 +39,7 @@ export default function FormularioTarea({
 
   const [tipo, setTipo] = React.useState<Selection>(new Set([]));
   const [tipoValido, setTipoValido] = React.useState(true)
-  const [fechaSeleccionada, setFechaSeleccionada] = React.useState<Date | undefined>();
+  const [fechaSeleccionada, setFechaSeleccionada] = React.useState<Date | undefined>(undefined);
   const [fechaValida, setFechaValida] = React.useState(true)
   const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>()
   const [horaValida, setHoraValida] = React.useState(true)

@@ -53,9 +53,9 @@ export default function Home() {
   const eliminarTareas = async () => {
     const exito = await llamadasAEndpoints.eliminarTareas(tareasSeleccionadas);
     if (exito.eliminacionCorrecta) {
-      obtenerTareas()
+      obtenerTareas();
     } else {
-      alert('Ha ocurrido un error eliminando las tareas')
+      alert("Ha ocurrido un error eliminando las tareas");
     }
   };
 

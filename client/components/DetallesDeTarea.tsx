@@ -11,6 +11,7 @@ import {
   ScrollShadow,
 } from "@nextui-org/react";
 import React from "react";
+import DangerIcon from "./DangerIcon";
 
 interface detallesTarea {
   isOpen: boolean;
@@ -19,6 +20,7 @@ interface detallesTarea {
   contenido: string;
   tipo: string;
   fechaLimite: string;
+  tareaFueraDeFecha: boolean;
 }
 
 export default function DetallesDeTarea({
@@ -28,6 +30,7 @@ export default function DetallesDeTarea({
   contenido,
   tipo,
   fechaLimite,
+  tareaFueraDeFecha,
 }: detallesTarea) {
 
   const [scrollBehavior, setScrollBehavior] = React.useState<ModalProps["scrollBehavior"]>("inside");
@@ -68,7 +71,9 @@ export default function DetallesDeTarea({
                   orientation="horizontal"
                   size={8}
                 >
-                  <h1 className="text-xl overflow-x-scroll text-center">{titulo}</h1>
+                  <h1 className="text-xl overflow-x-scroll text-center">
+                    {titulo}
+                  </h1>
                 </ScrollShadow>
               </ModalHeader>
               <Divider />
@@ -88,9 +93,23 @@ export default function DetallesDeTarea({
                   <Chip size="sm" variant="flat" color={color()}>
                     {tipo}
                   </Chip>
-                  <p>
-                    {dia + "-" + mes + "-" + annyo + " " + hora + ":" + minuto}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <Chip
+                      endContent={tareaFueraDeFecha ? (<DangerIcon />) : null}
+                      variant="light"
+                      color={tareaFueraDeFecha ? "warning" : "default"}
+                    >
+                      {dia +
+                        "-" +
+                        mes +
+                        "-" +
+                        annyo +
+                        " " +
+                        hora +
+                        ":" +
+                        minuto}
+                    </Chip>
+                  </div>
                 </div>
                 <div className="flex items-center justify-end gap-2 w/12">
                   <Button color={color()} radius="lg" onPress={onClose}>

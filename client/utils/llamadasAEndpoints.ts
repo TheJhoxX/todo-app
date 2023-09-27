@@ -20,7 +20,6 @@ const iniciarSesion = async (userName: String, password: String, primerInicio: b
       return data
     }
   } catch (error) {
-    alert("Se ha producido un error al iniciar sesión")
   }
 };
 
@@ -87,7 +86,6 @@ const nuevaTarea = async (
       return data
     }
     const data = await response.json()
-    alert(JSON.stringify(data))
     return data
   }
   catch (error) {
@@ -107,7 +105,6 @@ const cerrarSesion = async () => {
       return data
     }
     const data = await response
-    alert("Sesión cerrada correctamente")
     return data
   }
   catch (error) {
@@ -133,7 +130,6 @@ const eliminarTareas = async (
       return data
     }
     const data = await response.json()
-    alert("Tareas eliminadas correctamente" + JSON.stringify(data))
     return data
   }
   catch (error) {
