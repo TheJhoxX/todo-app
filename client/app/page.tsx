@@ -84,7 +84,7 @@ export default function App() {
 
   return (
     <div className="flex items-center justify-center h-screen w-full">
-      <Card radius="lg" className="w-1/2 max-h-1/2">
+      <Card radius="lg" className="w-1/2 md:w-2/5 lg:w-2/5 max-h-1/2">
         <CardHeader className="flex items-center justify-center flex-col w-full h-full">
           <SvgLista />
           <p className="text-lg font-semibold">todo-app</p>
