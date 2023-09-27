@@ -7,32 +7,37 @@ import {
   CardBody,
   CardFooter,
   Divider,
+  Tabs,
+  Tab,
 } from "@nextui-org/react";
 import SvgLista from "../components/SvgLista";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Key } from "react";
 import { useRouter } from "next/navigation";
+import { error } from "console";
 
 const llamadasAEndpoints = require("../utils/llamadasAEndpoints");
 
 export default function App() {
-  const router = useRouter()
+  const router = useRouter();
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
 
   const iniciarSesion = async (primerInicio: boolean) => {
     const userName = usernameRef.current.value;
     const password = passwordRef.current.value;
-    const inicioDeSesion = await llamadasAEndpoints
-      .iniciarSesion(userName, password, primerInicio)
-    
-    console.log(JSON.stringify(inicioDeSesion))
-    
-    if ((inicioDeSesion.primerInicio === false)) {
+    const inicioDeSesion = await llamadasAEndpoints.iniciarSesion(
+      userName,
+      password,
+      primerInicio
+    );
+
+    console.log(JSON.stringify(inicioDeSesion));
+
+    if (inicioDeSesion.primerInicio === false) {
       if (inicioDeSesion.sesionCorrecta === true) {
-        router.push("/home")
-      }
-      else {
-        cambiarErrores(true)
+        router.push("/home");
+      } else {
+        cambiarErrores(true);
       }
     }
   };
@@ -47,19 +52,20 @@ export default function App() {
           cambiarErrores(true);
         } else {
           cambiarErrores(false);
+          alert('Usuario registrado correctamente')
         }
       });
   };
 
   useEffect(() => {
-    iniciarSesion(true)
-  },[])
+    iniciarSesion(true);
+  }, []);
 
   const handleIniciarSesion = () => {
-    iniciarSesion(false)
-  }
+    iniciarSesion(false);
+  };
 
-  const [inicio, setInicio] = useState(true);
+  const [inicio, setInicio] = useState("login");
   const [sesionIncorrecta, setSesionIncorrecta] = useState(false);
 
   const cambiarInterfaz = () => {
@@ -69,6 +75,11 @@ export default function App() {
 
   const cambiarErrores = (nuevoEstado: boolean) => {
     setSesionIncorrecta(nuevoEstado);
+  };
+
+  const handleSelectionChange = (key: Key) => {
+    console.log(inicio);
+    setInicio(key.toString());
   };
 
   return (
@@ -90,6 +101,7 @@ export default function App() {
             ref={usernameRef}
             validationState={sesionIncorrecta ? "invalid" : "valid"}
             fullWidth={true}
+            variant="bordered"
           />
           <Input
             type="password"
@@ -101,29 +113,35 @@ export default function App() {
             ref={passwordRef}
             validationState={sesionIncorrecta ? "invalid" : "valid"}
             fullWidth={true}
+            variant="bordered"
           />
           <Button
-            onPress={inicio ? handleIniciarSesion : registrarUsuario}
-            className="w-1/2 font-bold transition duration-200"
+            onPress={(inicio === 'login') ? handleIniciarSesion : registrarUsuario}
+            className="font-bold transition duration-200"
             color="primary"
-            radius="lg"
+            radius="full"
             variant="shadow"
+            size="md"
           >
-            {inicio ? "Iniciar sesión" : "Registrar"}
+            {(inicio === "login") ? "Iniciar sesión" : "Registrar"}
           </Button>
+          {sesionIncorrecta ? (
+            <p className="text-danger transition duration-200">Ha habido un error con el nombre de usuario y/o contraseña</p>
+          ): (
+              null
+          )}
         </CardBody>
-        <CardFooter className="flex items-center justify-center gap-4 w-full h-full">
-          <p>
-            {inicio
-              ? "¿Aún no dispones de una cuenta?"
-              : "¿Ya dispones de una cuenta?"}
+        <CardFooter className="flex flex-col items-center justify-center gap-4 w-full h-full">
+          <p className="text-justify">
+            {inicio === "login"
+              ? "¿Aún no dispones de una cuenta? ¡Regístrate!"
+              : "¿Ya dispones de una cuenta? ¡Inicia sesión!"}
           </p>
-          <p
-            onClick={cambiarInterfaz}
-            className="text-blue-700 hover:transition duration-200 hover:underline hover:cursor-pointer hover:text-yellow-500"
-          >
-            {inicio ? "Regístrate" : "Iniciar sesión"}
-          </p>
+
+          <Tabs fullWidth selectedKey={inicio} onSelectionChange={handleSelectionChange}>
+            <Tab key="login" title="Iniciar sesión"></Tab>
+            <Tab key="register" title="Registrar"></Tab>
+          </Tabs>
         </CardFooter>
       </Card>
     </div>
