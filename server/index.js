@@ -44,7 +44,8 @@ const comprobarDatosDeFormulario = (data) => {
 
 app.post("/iniciarSesion", async (req, res) => {
   console.log(JSON.stringify(req.body))
-  if ((!req.session.user) && (req.body.primerInicio === false)) {
+  console.log("COOKIE:  " + JSON.stringify(req.session.user))
+  if ((req.body.primerInicio === false)) {
     controladorUsuarios.comprobarCredenciales(
       (errors, credencialesCorrectas, results) => {
         if (errors) {
@@ -74,10 +75,17 @@ app.post("/iniciarSesion", async (req, res) => {
       req.body
     );
   } else {
-    console.log("Utilizando la cookie para el inicio de sesión");
+    if (req.session.user) {
+      console.log("Utilizando la cookie para el inicio de sesión");
     res
       .status(200)
-      .json({sesionCorrecta: false, primerInicio: true})
+      .json({sesionCorrecta: true, primerInicio: true})
+    }
+    else {
+      res.
+        status(401)
+      .json({sesionCorrecta: false, primerInicio:true})
+    }
   }
 });
 

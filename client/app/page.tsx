@@ -13,7 +13,6 @@ import {
 import SvgLista from "../components/SvgLista";
 import { useEffect, useState, useRef, Key } from "react";
 import { useRouter } from "next/navigation";
-import { error } from "console";
 
 const llamadasAEndpoints = require("../utils/llamadasAEndpoints");
 
@@ -40,6 +39,11 @@ export default function App() {
         cambiarErrores(true);
       }
     }
+    else {
+      if (inicioDeSesion.sesionCorrecta) {
+        router.push("/home");
+      }
+    }
   };
 
   const registrarUsuario = () => {
@@ -51,10 +55,13 @@ export default function App() {
         if (registroCorrecto === false) {
           cambiarErrores(true);
         } else {
+          setRegistroCorrecto(true)
+
           cambiarErrores(false);
-          alert('Usuario registrado correctamente')
         }
       });
+    
+    console.log(registroCorrecto)
   };
 
   useEffect(() => {
@@ -67,17 +74,15 @@ export default function App() {
 
   const [inicio, setInicio] = useState("login");
   const [sesionIncorrecta, setSesionIncorrecta] = useState(false);
-
-  const cambiarInterfaz = () => {
-    setInicio(!inicio); // Cambia el estado al opuesto del estado actual
-    cambiarErrores(false);
-  };
+  const [registroCorrecto, setRegistroCorrecto] = useState(false)
 
   const cambiarErrores = (nuevoEstado: boolean) => {
     setSesionIncorrecta(nuevoEstado);
   };
 
   const handleSelectionChange = (key: Key) => {
+    cambiarErrores(false)
+    setRegistroCorrecto(false)
     console.log(inicio);
     setInicio(key.toString());
   };
@@ -116,19 +121,29 @@ export default function App() {
             variant="bordered"
           />
           <Button
-            onPress={(inicio === 'login') ? handleIniciarSesion : registrarUsuario}
+            onPress={
+              inicio === "login" ? handleIniciarSesion : registrarUsuario
+            }
             className="font-bold transition duration-200"
             color="primary"
             radius="full"
             variant="shadow"
             size="md"
           >
-            {(inicio === "login") ? "Iniciar sesión" : "Registrar"}
+            {inicio === "login" ? "Iniciar sesión" : "Registrar"}
           </Button>
-          {sesionIncorrecta ? (
-            <p className="text-danger transition duration-200">Ha habido un error con el nombre de usuario y/o contraseña</p>
-          ): (
-              null
+          {(inicio === "login") ? (
+            sesionIncorrecta ? (
+              <p className="text-danger transition duration-200">
+                Ha habido un error con el nombre de usuario y/o contraseña
+              </p>
+            ) : null
+          ) : (
+            registroCorrecto ?
+            <p className="text-success transition duration-200">
+                Usuario registrado correctamente
+            </p>
+            : null    
           )}
         </CardBody>
         <CardFooter className="flex flex-col items-center justify-center gap-4 w-full h-full">
@@ -138,7 +153,11 @@ export default function App() {
               : "¿Ya dispones de una cuenta? ¡Inicia sesión!"}
           </p>
 
-          <Tabs fullWidth selectedKey={inicio} onSelectionChange={handleSelectionChange}>
+          <Tabs
+            fullWidth
+            selectedKey={inicio}
+            onSelectionChange={handleSelectionChange}
+          >
             <Tab key="login" title="Iniciar sesión"></Tab>
             <Tab key="register" title="Registrar"></Tab>
           </Tabs>
