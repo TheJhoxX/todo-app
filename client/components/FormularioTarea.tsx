@@ -41,11 +41,11 @@ export default function FormularioTarea({
   const [tipoValido, setTipoValido] = React.useState(true)
   const [fechaSeleccionada, setFechaSeleccionada] = React.useState<Date | undefined>(undefined);
   const [fechaValida, setFechaValida] = React.useState(true)
-  const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>()
+  const [horaSeleccionada, setHoraSeleccionada] = React.useState<String | undefined>(undefined)
   const [horaValida, setHoraValida] = React.useState(true)
   const [tituloValido, setTituloValido] = React.useState<Boolean>(true);
   const [contenidoValido, setContenidoValido] = React.useState<Boolean>(true);
-  const [errores, setErrores] = React.useState<String | undefined>()
+  const [errores, setErrores] = React.useState<String | undefined>(undefined)
   const [longitudContenido, setLongitudContenido] = React.useState(0)
   const [longitudTitulo, setLongitudTitulo] = React.useState(0)
 
@@ -61,6 +61,20 @@ export default function FormularioTarea({
       return "default";
     }
   };
+
+  const reset = () => {
+    setTipo(new Set([]))
+    setTipoValido(true)
+    setFechaSeleccionada(undefined)
+    setFechaValida(true)
+    setHoraSeleccionada(undefined)
+    setHoraValida(true)
+    setTituloValido(true)
+    setContenidoValido(true)
+    setErrores(undefined)
+    setLongitudContenido(0)
+    setLongitudTitulo(0)
+  }
 
   const handleFechaSeleccionada = (fechaSeleccionada: Date | undefined) => {
     setFechaSeleccionada(fechaSeleccionada)
@@ -97,6 +111,7 @@ export default function FormularioTarea({
         return false;
       } else {
         getTareas();
+        reset();
         return true;
       }
     } catch (error) {
@@ -217,7 +232,10 @@ export default function FormularioTarea({
                     color="danger"
                     variant="flat"
                     radius="lg"
-                    onPress={onClose}
+                    onPress={() => {
+                      reset()
+                      onClose()
+                    }}
                   >
                     Cancelar
                   </Button>
