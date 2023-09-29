@@ -3,7 +3,7 @@ import { Button, Tooltip } from "@nextui-org/react";
 import Tarea from "../../components/Tarea";
 import { Key, useEffect, useState } from "react";
 const llamadasAEndpoints = require("../../utils/llamadasAEndpoints");
-import TabMenu from "../../components/tabMenu";
+import TabMenu from "../../components/TabMenu";
 import FormularioTarea from "../../components/FormularioTarea";
 
 interface tarea {

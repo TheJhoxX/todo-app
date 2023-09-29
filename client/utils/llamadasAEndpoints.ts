@@ -20,6 +20,7 @@ const iniciarSesion = async (userName: String, password: String, primerInicio: b
       return data
     }
   } catch (error) {
+    console.error("Se ha producido un error al iniciar sesión:  " + error)
   }
 };
 
@@ -34,10 +35,8 @@ const registrarUsuario = async (userName: String, password: String) => {
       body: JSON.stringify({ userName, password }),
     });
     if (response.ok) {
-      alert("Usuario registrado correctamente");
       return true
     } else {
-      alert("Se ha producido un error al registrar el usuario");
       return false
     }
   } catch (error) {
