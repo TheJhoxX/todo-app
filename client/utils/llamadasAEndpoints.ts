@@ -51,9 +51,7 @@ const obtenerTareasDeUsuario = async () => {
       method: "GET",
       credentials: "include",
     });
-    if (!response.ok) {
-      throw new Error ("Se ha producido un error al obtener las tareas")
-    }
+    
     const data = await response.json()
     return data
   }

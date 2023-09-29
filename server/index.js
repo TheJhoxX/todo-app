@@ -23,6 +23,14 @@ app.use(
   })
 );
 
+const comprobarSesionMiddleware = (req, res, next) => {
+  if (!req.session.user) {
+    console.error('SESIÓN NO INICIADA')
+    return res.status(401).json({ sesionIniciada: false });
+  }
+  next ()
+}
+
 
 const comprobarDatosDeFormulario = (data) => {
   const { titulo, contenido, hora, fecha, tipo } = data;
@@ -43,7 +51,7 @@ const comprobarDatosDeFormulario = (data) => {
 
 
 app.post("/iniciarSesion", async (req, res) => {
-  console.log(JSON.stringify(req.body))
+
   console.log("COOKIE:  " + JSON.stringify(req.session.user))
   if ((req.body.primerInicio === false)) {
     controladorUsuarios.comprobarCredenciales(
@@ -89,13 +97,9 @@ app.post("/iniciarSesion", async (req, res) => {
   }
 });
 
-app.post("/cerrarSesion", async (req, res) => {
-  if (req.session.user) {
-    req.session.user = undefined
-    res.status(200).send("Sesión cerrada correctamente")
-  } else {
-    res.status(401).send("No hay sesión que cerrar")
-  }
+app.post("/cerrarSesion", comprobarSesionMiddleware, async (req, res) => {
+    req.session.user = undefined;
+    res.status(200).send("Sesión cerrada correctamente");
 })
 
 app.post("/registrarUsuario", async (req, res) => {
@@ -114,8 +118,7 @@ app.post("/registrarUsuario", async (req, res) => {
   }, req.body);
 });
 
-app.get("/tareas", async (req, res) => {
-  if (req.session.user) {
+app.get("/tareas", comprobarSesionMiddleware, async (req, res) => {
     controladorTareas.obtenerTareasDeUsuario((errors, results) => {
       if (errors) {
         res
@@ -125,14 +128,12 @@ app.get("/tareas", async (req, res) => {
               errors
           );
       } else {
-        res.status(200).json(results);
+        res.status(200).json({ tareas: results });
       }
     }, req.session.user);
-  } else {
-  }
 });
 
-app.post("/nuevaTarea", async (req, res) => {
+app.post("/nuevaTarea", comprobarSesionMiddleware, async (req, res) => {
 
   const validezDelFormulario = comprobarDatosDeFormulario(req.body)
   if (validezDelFormulario.formularioCorrecto === false) {
@@ -164,10 +165,8 @@ app.post("/nuevaTarea", async (req, res) => {
   }
 });
 
-app.post("/eliminarTareas", async (req, res) => {
-  console.log('TAREAS:  ' + JSON.stringify(req.body.identificadores))
-  console.log('SESION:  ' + JSON.stringify(req.session.user))
-  if (req.session.user) {
+app.post("/eliminarTareas", comprobarSesionMiddleware, async (req, res) => {
+
     controladorTareas.eliminarTareas((errors,results) => {
       if (errors) {
         res.status(404).json(
@@ -183,7 +182,6 @@ app.post("/eliminarTareas", async (req, res) => {
         )
       }
     }, req.body.identificadores)
-  }
 })
 
 app.listen(PORT, () => {

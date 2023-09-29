@@ -5,6 +5,7 @@ import { Key, useEffect, useState } from "react";
 const llamadasAEndpoints = require("../../utils/llamadasAEndpoints");
 import TabMenu from "../../components/TabMenu";
 import FormularioTarea from "../../components/FormularioTarea";
+import { useRouter } from "next/navigation";
 
 interface tarea {
   id: number;
@@ -17,6 +18,8 @@ interface tarea {
 }
 
 export default function Home() {
+  const router = useRouter();
+
   const [tareas, setTareas] = useState<tarea[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<string>("todas");
@@ -52,10 +55,12 @@ export default function Home() {
 
   const eliminarTareas = async () => {
     const exito = await llamadasAEndpoints.eliminarTareas(tareasSeleccionadas);
-    if (exito.eliminacionCorrecta) {
-      obtenerTareas();
-    } else {
-      alert("Ha ocurrido un error eliminando las tareas");
+    if (exito.sesionIniciada !== undefined) {
+      if (exito.eliminacionCorrecta) {
+        router.push("/")
+      } else {
+        obtenerTareas()
+      }
     }
   };
 
@@ -67,20 +72,13 @@ export default function Home() {
     setIsOpen(!isOpen);
   };
 
-  const obtenerTareas = () => {
-    llamadasAEndpoints
-      .obtenerTareasDeUsuario()
-      .then((tareas: tarea[]) => {
-        // Aquí definimos el tipo del parámetro como Tarea[]
-        if (tareas) {
-          setTareas(tareas);
-        } else {
-          setTareas([]);
-        }
-      })
-      .catch((error: Error) => {
-        console.error("Error al obtener tareas:", error);
-      });
+  const obtenerTareas = async () => {
+    const resultado = await llamadasAEndpoints.obtenerTareasDeUsuario();
+    if (resultado.sesionIniciada !== undefined) {
+      router.push("/");
+    } else {
+      setTareas(resultado.tareas)
+    }
   };
 
   useEffect(() => {
