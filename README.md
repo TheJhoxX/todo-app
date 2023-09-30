@@ -28,3 +28,5 @@ Para arrancar el servidor que recibe las peticiones:
 ## ANOTACIONES:
 
 Se deberá tener ambos servidores en ejecución para el correcto funcionamiento de la aplicación, tanto el del cliente como el del servidor.
+
+En el directorio raíz del repositorio se encuentra un fichero con extensión .sql para la creación de las tablas de la base de datos.
