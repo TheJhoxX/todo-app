@@ -54,9 +54,9 @@ export default function App() {
         .then((registroCorrecto: boolean) => {
           if (registroCorrecto === false) {
             cambiarErrores(true);
+            setRegistroCorrecto(false)
           } else {
             setRegistroCorrecto(true);
-
             cambiarErrores(false);
           }
         });
