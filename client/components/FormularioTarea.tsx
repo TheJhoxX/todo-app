@@ -34,8 +34,8 @@ export default function FormularioTarea({
   getTareas,
 }: FormularioTareaProps) {
   
-  const contenidoRef = useRef(null)
-  const tituloRef = useRef(null)
+  const contenidoRef = useRef<HTMLInputElement | null>(null);
+  const tituloRef = useRef<HTMLInputElement | null>(null);
 
   const [tipo, setTipo] = React.useState<Selection>(new Set([]));
   const [tipoValido, setTipoValido] = React.useState(true)
@@ -90,7 +90,8 @@ export default function FormularioTarea({
     const contenido = contenidoRef.current ? contenidoRef.current.value : null
     const hora = horaSeleccionada
     const fecha = fechaSeleccionada
-    const tipoDeTarea = tipo
+    const tipoDeTarea = Array.from(tipo)[0];
+
 
     try {
       const camposCorrectos: camposFormulario = await llamadasAEndpoints.nuevaTarea(
@@ -98,7 +99,7 @@ export default function FormularioTarea({
         contenido,
         hora,
         fecha?.toISOString(),
-        tipoDeTarea.currentKey
+        tipoDeTarea
       );
     
       if (camposCorrectos.formularioCorrecto === false) {
@@ -151,8 +152,10 @@ export default function FormularioTarea({
                   validationState={tituloValido ? "valid" : "invalid"}
                   maxLength={60}
                   onChange={() => {
-                    if (tituloRef.current.value.length <= 1000) {
-                      setLongitudTitulo(tituloRef.current.value.length);
+                    if (tituloRef.current) {
+                      if (tituloRef.current.value.length <= 1000) {
+                        setLongitudTitulo(tituloRef.current.value.length);
+                      }
                     }
                   }}
                   ref={tituloRef}
@@ -166,8 +169,10 @@ export default function FormularioTarea({
                   size="md"
                   label="Contenido"
                   onChange={() => {
-                    if (contenidoRef.current.value.length <= 1000) {
-                      setLongitudContenido(contenidoRef.current.value.length);
+                    if (contenidoRef.current) {
+                      if (contenidoRef.current.value.length <= 1000) {
+                        setLongitudContenido(contenidoRef.current.value.length);
+                      }
                     }
                   }}
                   description={

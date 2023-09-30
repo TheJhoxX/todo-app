@@ -18,50 +18,49 @@ const llamadasAEndpoints = require("../utils/llamadasAEndpoints");
 
 export default function App() {
   const router = useRouter();
-  const usernameRef = useRef(null);
-  const passwordRef = useRef(null);
+  const usernameRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const iniciarSesion = async (primerInicio: boolean) => {
-    const userName = usernameRef.current.value;
-    const password = passwordRef.current.value;
-    const inicioDeSesion = await llamadasAEndpoints.iniciarSesion(
-      userName,
-      password,
-      primerInicio
-    );
+    if (usernameRef.current && passwordRef.current) {
+      const userName = usernameRef.current.value;
+      const password = passwordRef.current.value;
+      const inicioDeSesion = await llamadasAEndpoints.iniciarSesion(
+        userName,
+        password,
+        primerInicio
+      );
 
-    console.log(JSON.stringify(inicioDeSesion));
-
-    if (inicioDeSesion.primerInicio === false) {
-      if (inicioDeSesion.sesionCorrecta === true) {
-        router.push("/home");
+      if (inicioDeSesion.primerInicio === false) {
+        if (inicioDeSesion.sesionCorrecta === true) {
+          router.push("/home");
+        } else {
+          cambiarErrores(true);
+        }
       } else {
-        cambiarErrores(true);
-      }
-    }
-    else {
-      if (inicioDeSesion.sesionCorrecta) {
-        router.push("/home");
+        if (inicioDeSesion.sesionCorrecta) {
+          router.push("/home");
+        }
       }
     }
   };
 
   const registrarUsuario = () => {
-    const userName = usernameRef.current.value;
-    const password = passwordRef.current.value;
-    llamadasAEndpoints
-      .registrarUsuario(userName, password)
-      .then((registroCorrecto: boolean) => {
-        if (registroCorrecto === false) {
-          cambiarErrores(true);
-        } else {
-          setRegistroCorrecto(true)
+    if (usernameRef.current && passwordRef.current) {
+      const userName = usernameRef.current.value;
+      const password = passwordRef.current.value;
+      llamadasAEndpoints
+        .registrarUsuario(userName, password)
+        .then((registroCorrecto: boolean) => {
+          if (registroCorrecto === false) {
+            cambiarErrores(true);
+          } else {
+            setRegistroCorrecto(true);
 
-          cambiarErrores(false);
-        }
-      });
-    
-    console.log(registroCorrecto)
+            cambiarErrores(false);
+          }
+        });
+    }
   };
 
   useEffect(() => {
@@ -74,16 +73,15 @@ export default function App() {
 
   const [inicio, setInicio] = useState("login");
   const [sesionIncorrecta, setSesionIncorrecta] = useState(false);
-  const [registroCorrecto, setRegistroCorrecto] = useState(false)
+  const [registroCorrecto, setRegistroCorrecto] = useState(false);
 
   const cambiarErrores = (nuevoEstado: boolean) => {
     setSesionIncorrecta(nuevoEstado);
   };
 
   const handleSelectionChange = (key: Key) => {
-    cambiarErrores(false)
-    setRegistroCorrecto(false)
-    console.log(inicio);
+    cambiarErrores(false);
+    setRegistroCorrecto(false);
     setInicio(key.toString());
   };
 
@@ -132,19 +130,17 @@ export default function App() {
           >
             {inicio === "login" ? "Iniciar sesión" : "Registrar"}
           </Button>
-          {(inicio === "login") ? (
+          {inicio === "login" ? (
             sesionIncorrecta ? (
               <p className="text-danger transition duration-200">
                 Ha habido un error con el nombre de usuario y/o contraseña
               </p>
             ) : null
-          ) : (
-            registroCorrecto ?
+          ) : registroCorrecto ? (
             <p className="text-success transition duration-200">
-                Usuario registrado correctamente
+              Usuario registrado correctamente
             </p>
-            : null    
-          )}
+          ) : null}
         </CardBody>
         <CardFooter className="flex flex-col items-center justify-center gap-4 w-full h-full">
           <p className="text-justify">
