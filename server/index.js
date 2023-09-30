@@ -48,7 +48,9 @@ const comprobarDatosDeFormulario = (data) => {
   return validezDelFormulario 
 }
 
-
+app.get("/", async (req, res) => {
+  return "Accede a: https://todo-app-thejhoxx.vercel.app/"  
+})
 
 app.post("/iniciarSesion", async (req, res) => {
 
