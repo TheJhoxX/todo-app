@@ -10,9 +10,10 @@ const app = express();
 app.use(
   session({
     secret: "mi-secreto",
-    resave: true,
+    resave: false,
     saveUninitialized: true,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
+    store: new RedisStore(),
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 2}, // Porque no estoy usando https, sino -> true
   })
 );
 app.use(express.json());
