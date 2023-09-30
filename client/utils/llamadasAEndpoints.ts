@@ -1,10 +1,8 @@
-import { error } from "console";
-import { da } from "date-fns/locale";
-import { Result } from "postcss";
+const urlBackend = "https://todo-app-thejhoxx-backend.onrender.com"
 
 const iniciarSesion = async (userName: String, password: String, primerInicio: boolean) => {
   try {
-    const response = await fetch("http://localhost:3001/iniciarSesion", {
+    const response = await fetch(urlBackend + "/iniciarSesion", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -26,7 +24,7 @@ const iniciarSesion = async (userName: String, password: String, primerInicio: b
 
 const registrarUsuario = async (userName: String, password: String) => {
   try {
-    const response = await fetch("http://localhost:3001/registrarUsuario", {
+    const response = await fetch(urlBackend + "/registrarUsuario", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -47,7 +45,7 @@ const registrarUsuario = async (userName: String, password: String) => {
 
 const obtenerTareasDeUsuario = async () => {
   try {
-    const response = await fetch("http://localhost:3001/tareas", {
+    const response = await fetch(urlBackend + "/tareas", {
       method: "GET",
       credentials: "include",
     });
@@ -70,7 +68,7 @@ const nuevaTarea = async (
   tipo: String
 ) => {
   try {
-    const response = await fetch("http://localhost:3001/nuevaTarea", {
+    const response = await fetch(urlBackend + "/nuevaTarea", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -93,7 +91,7 @@ const nuevaTarea = async (
 
 const cerrarSesion = async () => {
   try {
-    const response = await fetch("http://localhost:3001/cerrarSesion", {
+    const response = await fetch(urlBackend + "/cerrarSesion", {
       method: "POST",
       credentials: "include",
     })
@@ -114,7 +112,7 @@ const eliminarTareas = async (
   identificadores: number[]
 ) => {
   try {
-    const response = await fetch("http://localhost:3001/eliminarTareas", {
+    const response = await fetch(urlBackend + "/eliminarTareas", {
       method: "POST",
       credentials: "include",
       headers: {
