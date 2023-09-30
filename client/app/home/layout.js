@@ -1,6 +1,5 @@
 
-import MiNavbar from "../../components/miNavbar"
-  
+import MiNavbar from "@/components/MiNavbar";  
 export default function RootLayout({ children }) {
   return (
     <div>

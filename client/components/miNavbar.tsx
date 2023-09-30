@@ -13,7 +13,7 @@ import {
 import React from "react";
 import SvgLista from "./SvgLista";
 import { useRouter } from "next/navigation";
-const llamadasAEndpoints = require("../utils/llamadasAEndpoints");
+const llamadasAEndpoints = require("@/utils/llamadasAEndpoints");
 
 
 export default function MiNavbar() {

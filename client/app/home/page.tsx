@@ -1,10 +1,10 @@
 "use client";
 import { Button, Tooltip } from "@nextui-org/react";
-import Tarea from "../../components/Tarea";
 import { Key, useEffect, useState } from "react";
-const llamadasAEndpoints = require("../../utils/llamadasAEndpoints");
-import TabMenu from "../../components/TabMenu";
-import FormularioTarea from "../../components/FormularioTarea";
+const llamadasAEndpoints = require("@/utils/llamadasAEndpoints");
+import TabMenu from "@/components/TabMenu";
+import FormularioTarea from "@/components/FormularioTarea";
+import Tarea from "@/components/Tarea";
 import { useRouter } from "next/navigation";
 
 interface tarea {

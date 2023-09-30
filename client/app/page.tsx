@@ -10,7 +10,7 @@ import {
   Tabs,
   Tab,
 } from "@nextui-org/react";
-import SvgLista from "../components/SvgLista";
+import SvgLista from "@/components/SvgLista";
 import { useEffect, useState, useRef, Key } from "react";
 import { useRouter } from "next/navigation";
 
