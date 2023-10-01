@@ -18,7 +18,7 @@ app.use(
 app.use(express.json());
 app.use(
   cors({
-    origin: true,
+    origin: "https://todo-app-thejhoxx.vercel.app",
     credentials: true,
   })
 );
