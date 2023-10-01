@@ -4,7 +4,7 @@ const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller")
 
-const PORT = process.env.PORT || 8080;
+const PORT = 3001;
 
 const app = express();
 app.use(
@@ -12,8 +12,7 @@ app.use(
     secret: "mi-secreto",
     resave: false,
     saveUninitialized: true,
-    store: new RedisStore(),
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 2}, // Porque no estoy usando https, sino -> true
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
   })
 );
 app.use(express.json());
