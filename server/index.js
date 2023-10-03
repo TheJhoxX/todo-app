@@ -51,7 +51,7 @@ app.use(
 
 const comprobarSesionMiddleware = (req, res, next) => {
   console.log(JSON.stringify(req.session));
-  if (!req.session.user) {
+  if (!req.session) {
     console.error("SESIÓN NO INICIADA");
     return res.status(401).json({ sesionIniciada: false });
   }
