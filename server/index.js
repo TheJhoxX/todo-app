@@ -2,8 +2,8 @@ const express = require("express");
 const session = require("express-session");
 const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
-const controladorTareas = require("./contoladores/tareas.controller")
-require('dotenv').config(); // Cargar las variables de entorno desde un archivo .env
+const controladorTareas = require("./contoladores/tareas.controller");
+require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
 
 const PORT = process.env.PORT || 8080;
 
@@ -25,61 +25,66 @@ app.use(
 );
 
 const comprobarSesionMiddleware = (req, res, next) => {
+  console.log(JSON.stringify(req.session.user));
   if (!req.session.user) {
-    console.error('SESIÓN NO INICIADA')
+    console.error("SESIÓN NO INICIADA");
     return res.status(401).json({ sesionIniciada: false });
   }
-  next ()
-}
-
+  next();
+};
 
 const comprobarDatosDeFormulario = (data) => {
   const { titulo, contenido, hora, fecha, tipo } = data;
-  const validezDelFormulario = { formularioCorrecto: true, campos: {} }
-  if ((!titulo) || (!contenido) || (!hora) || (!fecha) || (!tipo)) {
-    validezDelFormulario.formularioCorrecto = false
+  const validezDelFormulario = { formularioCorrecto: true, campos: {} };
+  if (!titulo || !contenido || !hora || !fecha || !tipo) {
+    validezDelFormulario.formularioCorrecto = false;
   }
-  titulo ? validezDelFormulario.campos.titulo = true : validezDelFormulario.campos.titulo = false
-  contenido ? validezDelFormulario.campos.contenido = true : validezDelFormulario.campos.contenido = false
-  hora ? validezDelFormulario.campos.hora = true : validezDelFormulario.campos.hora = false
-  fecha ? validezDelFormulario.campos.fecha = true : validezDelFormulario.campos.fecha = false
-  tipo ? validezDelFormulario.campos.tipo = true : validezDelFormulario.campos.tipo = false
+  titulo
+    ? (validezDelFormulario.campos.titulo = true)
+    : (validezDelFormulario.campos.titulo = false);
+  contenido
+    ? (validezDelFormulario.campos.contenido = true)
+    : (validezDelFormulario.campos.contenido = false);
+  hora
+    ? (validezDelFormulario.campos.hora = true)
+    : (validezDelFormulario.campos.hora = false);
+  fecha
+    ? (validezDelFormulario.campos.fecha = true)
+    : (validezDelFormulario.campos.fecha = false);
+  tipo
+    ? (validezDelFormulario.campos.tipo = true)
+    : (validezDelFormulario.campos.tipo = false);
 
-  console.log(JSON.stringify(validezDelFormulario))
-  return validezDelFormulario 
-}
+  console.log(JSON.stringify(validezDelFormulario));
+  return validezDelFormulario;
+};
 
 app.get("/", async (req, res) => {
-  return "Accede a: https://todo-app-thejhoxx.vercel.app/"  
-})
+  return "Accede a: https://todo-app-thejhoxx.vercel.app/";
+});
 
 app.post("/iniciarSesion", async (req, res) => {
-  console.log("ACCEDIENDO A INICIO DE SESIÓN: ")
-  console.log(JSON.stringify(req.body))
-  if ((req.body.primerInicio === false)) {
+  console.log("ACCEDIENDO A INICIO DE SESIÓN: ");
+  console.log(JSON.stringify(req.body.userName));
+  if (req.body.primerInicio === false) {
     controladorUsuarios.comprobarCredenciales(
       (errors, credencialesCorrectas, results) => {
         if (errors) {
-          res
-            .status(401)
-            .json({sesionCorrecta: false, primerInicio: false})
+          res.status(401).json({ sesionCorrecta: false, primerInicio: false });
         } else {
           if (credencialesCorrectas === true) {
-            console.log(results)
+            console.log(results);
             req.session.user = {
               userId: results[0].id,
               username: results[0].nombre,
-              password: results[0].password,
             };
-            console.log("COOKIE:  " + JSON.stringify(req.session.user))
-            res
-              .status(200)
-              .json({sesionCorrecta: true, primerInicio: false})
+            console.log("COOKIE:  " + JSON.stringify(req.session.user));
+            res.status(200).json({ sesionCorrecta: true, primerInicio: false });
           } else {
             console.log("Nombre de usuario y/o contraseña incorrectos");
             res
               .status(401)
-              .json({sesionCorrecta:false, primerInicio:false})
+              .json({ sesionCorrecta: false, primerInicio: false });
           }
         }
       },
@@ -88,26 +93,23 @@ app.post("/iniciarSesion", async (req, res) => {
   } else {
     if (req.session.user) {
       console.log("Utilizando la cookie para el inicio de sesión");
-    res
-      .status(200)
-      .json({sesionCorrecta: true, primerInicio: true})
-    }
-    else {
-      res.
-        status(401)
-      .json({sesionCorrecta: false, primerInicio:true})
+      res.status(200).json({ sesionCorrecta: true, primerInicio: true });
+    } else {
+      res.status(401).json({ sesionCorrecta: false, primerInicio: true });
     }
   }
 });
 
 app.post("/cerrarSesion", comprobarSesionMiddleware, async (req, res) => {
-    req.session.user = undefined;
-    res.status(200).send("Sesión cerrada correctamente");
-})
+  console.log("ACCESO A CERRAR SESIÓN:  ");
+  console.log(JSON.stringify(req.session.user));
+  req.session.user = undefined;
+  res.status(200).send("Sesión cerrada correctamente");
+});
 
 app.post("/registrarUsuario", async (req, res) => {
-  console.log("ACCEDIENDO A REGISTRO: ")
-  console.log(JSON.stringify(req.body))
+  console.log("ACCEDIENDO A REGISTRO: ");
+  console.log(JSON.stringify(req.body.userName));
   controladorUsuarios.registrarUsuario((errors, results) => {
     if (errors) {
       res
@@ -124,72 +126,66 @@ app.post("/registrarUsuario", async (req, res) => {
 });
 
 app.get("/tareas", comprobarSesionMiddleware, async (req, res) => {
-  console.log("ACCEDIENDO A TAREAS: ")
-  console.log(JSON.stringify(req.body))  
+  console.log("ACCEDIENDO A TAREAS: ");
+  console.log(JSON.stringify(req.body));
   controladorTareas.obtenerTareasDeUsuario((errors, results) => {
-      if (errors) {
-        res
-          .status(401)
-          .send(
-            "Se ha producido un error al acceder a las tareas del usuario: " +
-              errors
-          );
-      } else {
-        res.status(200).json({ tareas: results });
-      }
-    }, req.session.user);
+    if (errors) {
+      res
+        .status(401)
+        .send(
+          "Se ha producido un error al acceder a las tareas del usuario: " +
+            errors
+        );
+    } else {
+      res.status(200).json({ tareas: results });
+    }
+  }, req.session.user);
 });
 
 app.post("/nuevaTarea", comprobarSesionMiddleware, async (req, res) => {
-
-  const validezDelFormulario = comprobarDatosDeFormulario(req.body)
+  console.log("ACCEDIENDO A NUEVA TAREA:  ");
+  console.log(JSON.stringify(req.body));
+  const validezDelFormulario = comprobarDatosDeFormulario(req.body);
   if (validezDelFormulario.formularioCorrecto === false) {
-    res
-    .status(401)
-    .json(validezDelFormulario)
+    res.status(401).json(validezDelFormulario);
   } else {
-    const data = req.body
-    data.idUsuario = req.session.user.userId
+    const data = req.body;
+    data.idUsuario = req.session.user.userId;
     controladorTareas.crearTarea((errors, results) => {
       if (errors) {
-        console.error('ERROR: ' + errors)
+        console.error("ERROR: " + errors);
         res.status(401).send("No se ha podido añadir la tarea:    " + errors);
       } else {
-        res
-          .status(200)
-          .json({
-            formularioCorrecto: true,
-            campos: {
-              titulo: true,
-              contenido: true,
-              hora: true,
-              fecha: true,
-              tipo: true,
-            },
-          });
+        res.status(200).json({
+          formularioCorrecto: true,
+          campos: {
+            titulo: true,
+            contenido: true,
+            hora: true,
+            fecha: true,
+            tipo: true,
+          },
+        });
       }
     }, data);
   }
 });
 
 app.post("/eliminarTareas", comprobarSesionMiddleware, async (req, res) => {
-
-    controladorTareas.eliminarTareas((errors,results) => {
-      if (errors) {
-        res.status(404).json(
-          {
-            eliminacionCorrecta : false,
-          }
-        )
-      } else {
-        res.status(200).json(
-          {
-            eliminacionCorrecta: true,
-          }
-        )
-      }
-    }, req.body.identificadores)
-})
+  console.log("ACCEDIENDO A ELIMINAR TAREAS:  ");
+  console.log(JSON.stringify(req.body));
+  controladorTareas.eliminarTareas((errors, results) => {
+    if (errors) {
+      res.status(404).json({
+        eliminacionCorrecta: false,
+      });
+    } else {
+      res.status(200).json({
+        eliminacionCorrecta: true,
+      });
+    }
+  }, req.body.identificadores);
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
