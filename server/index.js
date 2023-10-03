@@ -4,6 +4,7 @@ const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller");
 const connectRedis = require('connect-redis'); // Importa connect-redis
+const Redis = require("ioredis")
 require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
 const conexion = require("./conexion")
 
