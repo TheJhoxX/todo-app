@@ -29,13 +29,14 @@ app.use(
     saveUninitialized: true,
     store: sessionStore, // Usa express-mysql-session como almacén de sesiones
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 },
+    sameSite: "None"
   })
 );
 
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://todo-app-thejhoxx.vercel.app",
+    origin: "https://todo-app-thejhoxx.vercel.app/*",
     credentials: true,
   })
 );
