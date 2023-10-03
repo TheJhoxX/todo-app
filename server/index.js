@@ -3,7 +3,7 @@ const session = require("express-session");
 const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller");
-const RedisStore = require('connect-redis')(session);
+const connectRedis = require('connect-redis'); // Importa connect-redis
 require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
 const conexion = require("./conexion")
 
@@ -13,6 +13,8 @@ const redisClient = new Redis()
 
 const app = express();
 
+
+const RedisStore = connectRedis(session)
 
 // Middleware de sesión
 app.use(

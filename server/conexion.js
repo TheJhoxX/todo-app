@@ -8,13 +8,11 @@ const pool = mysql.createPool({
     database: process.env.DB_DATABASE || 'todoApp', // Utiliza la variable de entorno o un valor predeterminado
     connectionLimit: 10,
     maxIdle: 10,
-    idleTimeout: 60000,
-    connectTimeout: 60000,
-    acquireTimeout: 60000,
+    idleTimeout: 30000,
+    connectTimeout: 30000,
     queueLimit: 0,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0
-    
 });
 
 module.exports = pool;
