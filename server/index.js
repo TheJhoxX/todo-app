@@ -30,7 +30,7 @@ app.use(
   session({
     secret: "mi-secreto",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: sessionStore, // Usa express-mysql-session como almacén de sesiones
     secure: false,
     sameSite: 'none',
