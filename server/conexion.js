@@ -6,9 +6,10 @@ const pool = mysql.createPool({
     user: process.env.DB_USER || 'root', // Utiliza la variable de entorno o un valor predeterminado
     password: process.env.DB_PASSWORD || 'root', // Utiliza la variable de entorno o un valor predeterminado
     database: process.env.DB_DATABASE || 'todoApp', // Utiliza la variable de entorno o un valor predeterminado
+    connectionLimit: 5,
     waitForConnections: true, // Esperar conexiones si el pool está lleno
     connectionLimit: 10, // Número máximo de conexiones en el pool
-    queueLimit: 3 // Sin límite de colas para conexiones en espera
+    setTimeout: 
 });
 
 module.exports = pool;
