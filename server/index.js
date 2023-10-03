@@ -54,8 +54,8 @@ app.get("/", async (req, res) => {
 })
 
 app.post("/iniciarSesion", async (req, res) => {
-
-  console.log("COOKIE:  " + JSON.stringify(req.session.user))
+  console.log("ACCEDIENDO A INICIO DE SESIÓN: ")
+  console.log(JSON.stringify(req.body))
   if ((req.body.primerInicio === false)) {
     controladorUsuarios.comprobarCredenciales(
       (errors, credencialesCorrectas, results) => {
@@ -106,6 +106,8 @@ app.post("/cerrarSesion", comprobarSesionMiddleware, async (req, res) => {
 })
 
 app.post("/registrarUsuario", async (req, res) => {
+  console.log("ACCEDIENDO A REGISTRO: ")
+  console.log(JSON.stringify(req.body))
   controladorUsuarios.registrarUsuario((errors, results) => {
     if (errors) {
       res
@@ -122,7 +124,9 @@ app.post("/registrarUsuario", async (req, res) => {
 });
 
 app.get("/tareas", comprobarSesionMiddleware, async (req, res) => {
-    controladorTareas.obtenerTareasDeUsuario((errors, results) => {
+  console.log("ACCEDIENDO A TAREAS: ")
+  console.log(JSON.stringify(req.body))  
+  controladorTareas.obtenerTareasDeUsuario((errors, results) => {
       if (errors) {
         res
           .status(401)
