@@ -3,19 +3,35 @@ const session = require("express-session");
 const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller");
+const MySQLStore = require('express-mysql-session')(session);
 require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
 
 const PORT = process.env.PORT || 8080;
 
 const app = express();
+
+const sessionStore = new MySQLStore({
+  host: process.env.DB_HOST || 'localhost',
+  port: 3306, // El puerto de MySQL
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || 'root',
+  database: process.env.DB_DATABASE || 'todoApp',
+  clearExpired: true, // Limpia las sesiones caducadas automáticamente
+  checkExpirationInterval: 900000, // Intervalo para comprobar las sesiones caducadas (15 minutos)
+  expiration: 86400000, // Tiempo de vida predeterminado de las sesiones (24 horas)
+});
+
+// Middleware de sesión
 app.use(
   session({
     secret: "mi-secreto",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
+    store: sessionStore, // Usa express-mysql-session como almacén de sesiones
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 },
   })
 );
+
 app.use(express.json());
 app.use(
   cors({
