@@ -3,8 +3,8 @@ const session = require("express-session");
 const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller");
-const redis = require('redis');
-const RedisStore = require('connect-redis')(session);
+import {createClient} from "redis"
+const RedisStore = require("connect-redis").default
 require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
 const conexion = require("./conexion")
 
@@ -14,17 +14,13 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 
 //Configure redis client
-const redisClient = redis.createClient({
-    host: process.env.SERVER_HOST,
-    port: PORT
-})
+let redisClient = createClient()
+redisClient.connect().catch(console.error)
 
-redisClient.on('error', function (err) {
-  console.log('Could not establish a connection with redis. ' + err);
-});
-redisClient.on('connect', function (err) {
-  console.log('Connected to redis successfully');
-});
+let redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "myapp:",
+})
 
 // Middleware de sesión
 app.use(
