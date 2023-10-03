@@ -29,6 +29,7 @@ function comprobarCredenciales(callback, data) {
 function registrarUsuario(callback, data) {
   pool.getConnection((error, connection) => {
     if (error) {
+      console.log("NO SE CONSIGUE OBTENER LA CONEXIÓN:  ")
       callback(error, null);
       return;
     }
@@ -37,6 +38,7 @@ function registrarUsuario(callback, data) {
     const values = [data.userName, data.password];
 
     connection.query(sql, values, (queryError, results) => {
+      console.log("ERROR EN EL REGISTRO POR LA QUERY: ")
       connection.release(); // Liberar la conexión cuando hayas terminado con ella
 
       if (queryError) {
