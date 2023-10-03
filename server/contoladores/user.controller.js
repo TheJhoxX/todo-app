@@ -19,11 +19,13 @@ function comprobarCredenciales(callback, data) {
 }
 
 function registrarUsuario(callback, data) {
+  console.log("ACCEDIENDO AL CONTROLADOR DE REGISTRO")
   pool.query(
     "INSERT INTO usuarios (nombre, password) VALUES (?,?)",
     [data.userName, data.password],
     (error, results) => {
       if (error) {
+        console.log("SE HA PRODUCIDO UN ERROR AL ACCEDER A LA DB")
         callback(error, null);
       } else {
         callback(null, results);
