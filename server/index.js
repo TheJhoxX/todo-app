@@ -9,7 +9,7 @@ require("dotenv").config(); // Cargar las variables de entorno desde un archivo 
 
 const PORT = process.env.PORT || 8080;
 
-var redisClient = redis.createClient({
+var client = redis.createClient({
   host: SERVER_HOST, // Cambia esto al host de tu servidor Redis
   port: PORT,        // Cambia esto al puerto de tu servidor Redis
 });
@@ -17,6 +17,7 @@ var redisClient = redis.createClient({
 const app = express();
 
 
+var sessionStore = new RedisStore({ client : client });
 
 
 // Middleware de sesión
@@ -25,7 +26,7 @@ app.use(
     secret: "mi-secreto",
     resave: false,
     saveUninitialized: false,
-    store: new RedisStore({ client: redisClient }),
+    store: sessionStore,
     secure: false,
     sameSite: 'none',
     cookie: {
