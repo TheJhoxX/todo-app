@@ -8,6 +8,7 @@ function comprobarCredenciales(callback, data) {
       if (error) {
         callback(error, null, null);
       } else {
+        console.log('SE LLEGA A EJECUTAR BIEN LA QUERY DE COMPROBACIÓN DE CREDENCIALES')
         if (results.length > 0) {
           callback(null, true, results);
         } else {

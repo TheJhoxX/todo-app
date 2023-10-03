@@ -51,7 +51,7 @@ app.use(
 
 const comprobarSesionMiddleware = (req, res, next) => {
   console.log(JSON.stringify(req.session));
-  if (!req.session) {
+  if (!req.session.user) {
     console.error("SESIÓN NO INICIADA");
     return res.status(401).json({ sesionIniciada: false });
   }
@@ -98,12 +98,12 @@ app.post("/iniciarSesion", async (req, res) => {
           res.status(401).json({ sesionCorrecta: false, primerInicio: false });
         } else {
           if (credencialesCorrectas === true) {
-            console.log(results);
+            console.log("SESSION ANTES DE FIJAR EL USUARIO: " + JSON.stringify(req.session));
             req.session.user = {
               userId: results[0].id,
               username: results[0].nombre,
             };
-            console.log("COOKIE:  " + JSON.stringify(req.session.user));
+            console.log("COOKIE CON EL USUARIO FIJADO:  " + JSON.stringify(req.session));
             res.status(200).json({ sesionCorrecta: true, primerInicio: false });
           } else {
             console.log("Nombre de usuario y/o contraseña incorrectos");
