@@ -28,6 +28,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: sessionStore, // Usa express-mysql-session como almacén de sesiones
+    sameSite: 'none',
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 },
   })
 );
