@@ -1,12 +1,20 @@
 const pool = require("../conexion");
 
 function comprobarCredenciales(callback, data) {
-  pool.query(
-    "SELECT * FROM usuarios WHERE nombre = ? AND password = ?",
-    [data.userName, data.password],
-    (error, results) => {
-      if (error) {
-        callback(error, null, null);
+  pool.getConnection((error, connection) => {
+    if (error) {
+      callback(error, null, null);
+      return;
+    }
+
+    const sql = "SELECT * FROM usuarios WHERE nombre = ? AND password = ?";
+    const values = [data.userName, data.password];
+
+    connection.query(sql, values, (queryError, results) => {
+      connection.release(); // Liberar la conexión cuando hayas terminado con ella
+
+      if (queryError) {
+        callback(queryError, null, null);
       } else {
         if (results.length > 0) {
           callback(null, true, results);
@@ -14,8 +22,8 @@ function comprobarCredenciales(callback, data) {
           callback(null, false, null);
         }
       }
-    }
-  );
+    });
+  });
 }
 
 function registrarUsuario(callback, data) {
