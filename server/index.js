@@ -3,27 +3,16 @@ const session = require("express-session");
 const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller");
-const MySQLStore = require('express-mysql-session')(session);
+const Redis = require('ioredis')
 require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
 const conexion = require("./conexion")
 
 const PORT = process.env.PORT || 8080;
 
+const redisClient = new Redis()
+
 const app = express();
 
-const sessionStore = new MySQLStore({
-  createDatabaseTable: true,
-  schema: {
-    tableName: 'sessions',
-    columnNames: {
-      session_id: 'session_id',
-      expires: 'expires',
-      data: 'data',
-
-    }
-  },
-  expiration: 86400000,
-}, conexion); 
 
 // Middleware de sesión
 app.use(
@@ -31,7 +20,7 @@ app.use(
     secret: "mi-secreto",
     resave: false,
     saveUninitialized: false,
-    store: sessionStore, // Usa express-mysql-session como almacén de sesiones
+    store: new RedisStore({client: redisClient}), //Redis como almacenamiento de sesiones
     secure: false,
     sameSite: 'none',
     cookie: {
