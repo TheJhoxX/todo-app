@@ -16,9 +16,10 @@ const sessionStore = new MySQLStore({
   schema: {
     tableName: 'sessions',
     columnNames: {
-      session_id: 'id',
+      session_id: 'session_id',
       expires: 'expires',
-      data: 'data'
+      data: 'data',
+
     }
   },
   expiration: 86400000,
