@@ -5,21 +5,24 @@ const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller");
 const MySQLStore = require('express-mysql-session')(session);
 require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
+const conexion = require("./conexion")
 
 const PORT = process.env.PORT || 8080;
 
 const app = express();
 
 const sessionStore = new MySQLStore({
-  host: process.env.DB_HOST || 'localhost',
-  port: 3306, // El puerto de MySQL
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'root',
-  database: process.env.DB_DATABASE || 'todoApp',
-  clearExpired: true, // Limpia las sesiones caducadas automáticamente
-  checkExpirationInterval: 900000, // Intervalo para comprobar las sesiones caducadas (15 minutos)
-  expiration: 86400000, // Tiempo de vida predeterminado de las sesiones (24 horas)
-});
+  createDatabaseTable: true,
+  schema: {
+    tableName: 'sessions',
+    columnNames: {
+      session_id: 'id',
+      expires: 'expires',
+      data: 'data'
+    }
+  },
+  expiration: 86400000,
+}, conexion); 
 
 // Middleware de sesión
 app.use(
