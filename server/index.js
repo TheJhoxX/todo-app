@@ -33,7 +33,11 @@ app.use(
     store: sessionStore, // Usa express-mysql-session como almacén de sesiones
     secure: false,
     sameSite: 'none',
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 },
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+    },
   })
 );
 
@@ -46,7 +50,7 @@ app.use(
 );
 
 const comprobarSesionMiddleware = (req, res, next) => {
-  console.log(JSON.stringify(req.session.user));
+  console.log(JSON.stringify(req.session));
   if (!req.session.user) {
     console.error("SESIÓN NO INICIADA");
     return res.status(401).json({ sesionIniciada: false });
