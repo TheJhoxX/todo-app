@@ -19,10 +19,10 @@ app.use(
     secret: "mi-secreto",
     resave: false,
     saveUninitialized: false,
-    secure: false,
+    secure: true,
     sameSite: 'none',
     cookie: {
-      secure: false,
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24,
       httpOnly: true,
     },
