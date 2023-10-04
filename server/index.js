@@ -3,7 +3,9 @@ const session = require("express-session");
 const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller");
+const cookieParser = require("cookie-parser");
 require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
+
 
 const PORT = process.env.PORT || 8080;
 
@@ -11,14 +13,12 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 
 
-
-
 // Middleware de sesión
 app.use(
   session({
     secret: "mi-secreto",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     secure: true,
     sameSite: 'none',
     cookie: {
@@ -28,6 +28,8 @@ app.use(
     },
   })
 );
+
+app.use(cookieParser())
 
 app.use(express.json());
 app.use(
