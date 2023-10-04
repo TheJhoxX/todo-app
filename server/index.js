@@ -79,7 +79,6 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/iniciarSesion", async (req, res) => {
-  console.log("COOKIES DE CLIENTE:  " + JSON.stringify(req.cookies))
   console.log("ACCEDIENDO A INICIO DE SESIÓN: ");
   console.log(JSON.stringify(req.body.userName));
   if (req.body.primerInicio === false) {
