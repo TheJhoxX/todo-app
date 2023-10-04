@@ -21,11 +21,8 @@ app.use(
     saveUninitialized: true,
     secure: true,
     sameSite: 'none',
-    cookie: {
-      secure: true,
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
-    },
+    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
+
   })
 );
 
@@ -142,6 +139,7 @@ app.post("/registrarUsuario", async (req, res) => {
 });
 
 app.get("/tareas", comprobarSesionMiddleware, async (req, res) => {
+  console.log("COOKIES: " + req.cookies)
   console.log("ACCEDIENDO A TAREAS: ");
   console.log(JSON.stringify(req.body));
   controladorTareas.obtenerTareasDeUsuario((errors, results) => {
