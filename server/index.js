@@ -18,10 +18,10 @@ app.use(
   session({
     secret: "mi-secreto",
     resave: false,
-    saveUninitialized: true,
-    secure: true,
+    saveUninitialized: false,
+    secure: false,
     sameSite: 'none',
-    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
 
   })
 );
@@ -31,7 +31,7 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(
   cors({
-    origin: 'https://todo-app-thejhoxx.vercel.app',
+    origin: ['http://localhost:3000', 'https://todo-app-thejhoxx.vercel.app/'],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Especifica los métodos permitidos
     allowedHeaders: 'Content-Type,Authorization', // Especifica los encabezados permitidos
