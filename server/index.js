@@ -34,7 +34,7 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(
   cors({
-    origin: "*",
+    origin: ["https://todo-app-thejhoxx.vercel.app/", "https://todo-app-thejhoxx.vercel.app/home/"],
     credentials: true,
   })
 );
