@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 
 
-var sessionStore = new RedisStore({ client : client });
 
 
 // Middleware de sesión
