@@ -31,8 +31,10 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://todo-app-thejhoxx.vercel.app",
+    origin: 'https://todo-app-thejhoxx.vercel.app',
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Especifica los métodos permitidos
+    allowedHeaders: 'Content-Type,Authorization', // Especifica los encabezados permitidos
   })
 );
 
