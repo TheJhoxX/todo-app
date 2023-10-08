@@ -4,7 +4,6 @@ const cors = require("cors"); // Importa el paquete cors
 const controladorUsuarios = require("./contoladores/user.controller");
 const controladorTareas = require("./contoladores/tareas.controller");
 const cookieParser = require("cookie-parser");
-require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
 
 
 const PORT = process.env.PORT || 8080;
@@ -16,16 +15,13 @@ const app = express();
 // Middleware de sesión
 app.use(
   session({
-    secret: "mi-secreto",
+    secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: true,
-    secure: true,
+    saveUninitialized: false,
+    secure: false,
     sameSite: 'none',
-    cookie: {
-      secure: true,
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
-    },
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 }, // Porque no estoy usando https, sino -> true
+
   })
 );
 
@@ -34,8 +30,10 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://todo-app-thejhoxx.vercel.app", "https://todo-app-thejhoxx.vercel.app/home"],
+    origin: process.env.ORIGIN,
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Especifica los métodos permitidos
+    allowedHeaders: 'Content-Type,Authorization', // Especifica los encabezados permitidos
   })
 );
 
@@ -70,7 +68,6 @@ const comprobarDatosDeFormulario = (data) => {
     ? (validezDelFormulario.campos.tipo = true)
     : (validezDelFormulario.campos.tipo = false);
 
-  console.log(JSON.stringify(validezDelFormulario));
   return validezDelFormulario;
 };
 
@@ -80,23 +77,20 @@ app.get("/", async (req, res) => {
 
 app.post("/iniciarSesion", async (req, res) => {
   console.log("ACCEDIENDO A INICIO DE SESIÓN: ");
-  console.log(JSON.stringify(req.body.userName));
   if (req.body.primerInicio === false) {
     controladorUsuarios.comprobarCredenciales(
       (errors, credencialesCorrectas, results) => {
         if (errors) {
+          console.error("SE HA PRODUCIDO UN ERROR AL INICIAR SESIÓN:  " + errors)
           res.status(401).json({ sesionCorrecta: false, primerInicio: false });
         } else {
           if (credencialesCorrectas === true) {
-            console.log("SESSION ANTES DE FIJAR EL USUARIO: " + JSON.stringify(req.session));
             req.session.user = {
               userId: results[0].id,
               username: results[0].nombre,
             };
-            console.log("COOKIE CON EL USUARIO FIJADO:  " + JSON.stringify(req.session));
             res.status(200).json({ sesionCorrecta: true, primerInicio: false });
           } else {
-            console.log("Nombre de usuario y/o contraseña incorrectos");
             res
               .status(401)
               .json({ sesionCorrecta: false, primerInicio: false });
@@ -107,7 +101,6 @@ app.post("/iniciarSesion", async (req, res) => {
     );
   } else {
     if (req.session.user) {
-      console.log("Utilizando la cookie para el inicio de sesión");
       res.status(200).json({ sesionCorrecta: true, primerInicio: true });
     } else {
       res.status(401).json({ sesionCorrecta: false, primerInicio: true });
@@ -127,6 +120,7 @@ app.post("/registrarUsuario", async (req, res) => {
   console.log(JSON.stringify(req.body.userName));
   controladorUsuarios.registrarUsuario((errors, results) => {
     if (errors) {
+      console.error("SE HA PRODUCIDO UN ERROR AL REGISTRAR UN USUARIO:  " + errors)
       res
         .status(401)
         .send("No se ha podido registrar al usuario:    " + errors);
@@ -142,9 +136,10 @@ app.post("/registrarUsuario", async (req, res) => {
 
 app.get("/tareas", comprobarSesionMiddleware, async (req, res) => {
   console.log("ACCEDIENDO A TAREAS: ");
-  console.log(JSON.stringify(req.body));
+  console.log(JSON.stringify(req.session.user));
   controladorTareas.obtenerTareasDeUsuario((errors, results) => {
     if (errors) {
+      console.error("SE HA PRODUCIDO UN ERROR AL OBTENER LAS TAREAS DEL USUARIO:  " + errors)
       res
         .status(401)
         .send(
@@ -168,7 +163,7 @@ app.post("/nuevaTarea", comprobarSesionMiddleware, async (req, res) => {
     data.idUsuario = req.session.user.userId;
     controladorTareas.crearTarea((errors, results) => {
       if (errors) {
-        console.error("ERROR: " + errors);
+        console.error("SE HA PRODUCIDO UN ERROR AL AÑADIR UNA TAREA:  " + errors)
         res.status(401).send("No se ha podido añadir la tarea:    " + errors);
       } else {
         res.status(200).json({
@@ -191,6 +186,7 @@ app.post("/eliminarTareas", comprobarSesionMiddleware, async (req, res) => {
   console.log(JSON.stringify(req.body));
   controladorTareas.eliminarTareas((errors, results) => {
     if (errors) {
+      console.error("SE HA PRODUCIDO UN ERROR AL ELIMINAR TAREAS:  " + errors)
       res.status(404).json({
         eliminacionCorrecta: false,
       });
