@@ -1,7 +1,8 @@
-const urlBackend = "https://todo-app-thejhoxx-backend.onrender.com"
+const urlBackend = "http://localhost:8080"
 
 const iniciarSesion = async (userName: String, password: String, primerInicio: boolean) => {
   try {
+    console.log(urlBackend)
     const response = await fetch(urlBackend + "/iniciarSesion", {
       method: "POST",
       credentials: "include",

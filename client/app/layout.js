@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import { Providers } from "./providers";
+require("dotenv").config(); // Cargar las variables de entorno desde un archivo .env
 
 export const metadata = {
   title: "todo-app",
